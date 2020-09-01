@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>View Transactions</title>
+  </head>
+
+  <body>
+    <h1>Spending YTD for {{ selected_month|date:"Y" }}: ${{ total.amount__sum }}</h1>
+    <h2>{{ selected_month|date:"F, Y" }}: ${{ total_month.amount__sum }}</h2>
+    <ul>
+      {% for item in tx %}
+        <li>{{ item }}</li>
+      {% endfor %}
+    </ul>
+
+    <h2>Select a Past Month</h2>
+    {% for month in months %}
+      <h3>{{ year.year }}</h3>
+      <a href="{% url 'view:index' month.year month.month %}">{{ month|date:"F, Y" }}</a>
+    {% endfor %}
+
+
+    <hr>
+
+    <a href="{% url 'record:index' %}">Record new tx</a>
+  </body>
+</html>

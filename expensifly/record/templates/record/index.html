@@ -6,6 +6,15 @@
 
   <body>
     <h1>HELLO WORLD</h1>
+
+    <form action="{% url 'record:save' %}" method="post">
+      {% csrf_token %}
+      {{ form }}
+      <button type="submit">Submit</button>
+    </form>
+
+    <a href="{% url 'view:index' %}">View</a>
+
   </body>
 
 </html>
