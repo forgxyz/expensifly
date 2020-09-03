@@ -3,11 +3,11 @@ from django.urls import path
 from . import views
 
 # application namespace
-app_name = 'record'
+app_name = 'view'
 
 urlpatterns = [
+    path('<int:year>/<int:month>/', views.index, name='index'),
     path('', views.index, name='index'),
-    path('save', views.save, name='save'),
 ]
 
-# in template: {% url 'record:index' %}
+# in template: {% url 'viz:index' %}
