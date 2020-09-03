@@ -1,5 +1,7 @@
 # expensifly
 
+a basic django webapp for manually recording expenses for budgeting purposes. i currently do this via google forms and view the current month in excel, but i will replace that with this and build out some visualizations. this is the next iteration of the my CS50 final project from late 2019.
+
 ## TODO
 - [ ] viz / view app
   1. pull expense from db
