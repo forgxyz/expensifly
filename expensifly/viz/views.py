@@ -7,16 +7,17 @@ from django.db.models import Sum
 from record.models import Expense
 
 
-# default view will be a dashboard of spending
+# default view will be a dashboard of spending of current month
 def index(request, year=date.today().year, month=date.today().month):
-    # default to current month
-    tx_year = Expense.objects.all().filter(date__year=year)
+    selected_date = date(year, month, 1)
+
+    tx_year = Expense.objects.filter(date__year=year)
     tx_month = tx_year.filter(date__month=month)
 
-    total = tx_year.aggregate(Sum('amount'))
-    total_month = tx_month.aggregate(Sum('amount'))
+    total_year, total_month = tx_year.aggregate(Sum('amount')), tx_month.aggregate(Sum('amount'))
+    totals = {'year': format(round(total_year['amount__sum'],2), ',.2f'), 'month': format(round(total_month['amount__sum'], 2), ',.2f')}
 
     months = Expense.objects.dates('date', 'month')
 
-    context = {"selected_month": month, "tx": tx_month, "total": total, "total_month": total_month, 'months': months}
+    context = {"selected_date": selected_date, "tx": tx_month, "totals": totals, 'months': months}
     return render(request, 'viz/index.html', context=context)

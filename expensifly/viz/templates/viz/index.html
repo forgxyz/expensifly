@@ -1,27 +1,39 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>View Transactions</title>
-  </head>
+{% extends "record/base.html" %}
+{% block body %}
+  <div class="container">
+    <h1>Summary - {{ selected_date|date:"F Y" }}</h1>
+    <h2>MTD: ${{ totals.month }}</h2>
 
-  <body>
-    <h1>Spending YTD for {{ selected_month|date:"Y" }}: ${{ total.amount__sum }}</h1>
-    <h2>{{ selected_month|date:"F, Y" }}: ${{ total_month.amount__sum }}</h2>
-    <ul>
+    <h4>YTD: ${{ totals.year }}</h4>
+
+
+
+    <h5>Transaction List</h5>
+    <table class="table table-hover">
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Category</th>
+        <th scope="col">Comment</th>
+      </tr>
       {% for item in tx %}
-        <li>{{ item }}</li>
+        <tr>
+          <td>{{ item.date }}</td>
+          <td>{{ item.amount }}</td>
+          <td>{{ item.category }}</td>
+          <td>{{ item.comment }}</td>
+        </tr>
       {% endfor %}
-    </ul>
+    </table>
 
-    <h2>Select a Past Month</h2>
+    <h2>Past Months</h2>
     {% for month in months %}
-      <h3>{{ year.year }}</h3>
-      <a href="{% url 'view:index' month.year month.month %}">{{ month|date:"F, Y" }}</a>
+      <a href="{% url 'view:index' month.year month.month %}">{{ month|date:"F Y" }}</a><br>
     {% endfor %}
 
 
     <hr>
 
     <a href="{% url 'record:index' %}">Record new tx</a>
-  </body>
-</html>
+  </div>
+{% endblock %}

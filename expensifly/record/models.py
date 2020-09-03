@@ -33,8 +33,11 @@ class Expense(models.Model):
     comment = models.CharField(max_length=100, blank=True)
     tag = models.CharField(max_length=50, blank=True)
 
+    class Meta:
+        ordering = ['date']
+        
     def __str__(self):
-        return f"{self.comment} for ${self.amount} on {self.date}"
+        return f"${self.amount} on {self.date}, {self.category} - {self.comment}"
 
 
 class ExpenseForm(ModelForm):
