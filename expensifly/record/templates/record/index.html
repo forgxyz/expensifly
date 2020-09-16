@@ -1,16 +1,17 @@
 {% extends "record/base.html" %}
 {% block body %}
   <div class="container">
-    <h1>expensifly</h1>
+    <h1>home - overview</h1>
 
-    <form action="{% url 'record:save' %}" method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    <h2>{{ selected_date|date:"F Y" }} spending: ${{ totals.month }}</h2>
+    <h3>top 3 categories</h3>
+    <ol>
+      {% for cat in top_cats %}
+        <li>{{ cat.category__category }}: ${{ cat.amount__sum }}</li>
+      {% endfor %}
+    </ol>
 
-    <button onclick="{% url 'view:index' %}">View</button>
-    <a href="{% url 'view:index' %}">View</a>
-
+    <h3>snapshot</h3>
+    <p>insert quick-look here</p>
   </div>
 {% endblock %}

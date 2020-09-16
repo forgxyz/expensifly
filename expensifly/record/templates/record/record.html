@@ -1,0 +1,13 @@
+{% extends "record/base.html" %}
+{% block body %}
+
+  <div class="container">
+    <h1>record an expense</h1>
+    
+    <form action="{% url 'record:save' %}" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+{% endblock %}

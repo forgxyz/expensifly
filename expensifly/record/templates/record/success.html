@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Success!</title>
-  </head>
+{% extends "record/base.html" %}
+{% block body %}
 
-  <body>
-    {{ message }}
-    {{ transaction }}
 
-    <a href="{% url 'view:index' %}">View spending</a>
-  </body>
-</html>
+{% endblock %}
