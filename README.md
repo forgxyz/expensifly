@@ -1,9 +1,10 @@
+#### [to home](https://jackforgash.com/)
+
 # expensifly
-## [to home](https://jackforgash.com/)
 
 ### description
 a django webapp for manually recording expenses for budgeting purposes.  
-i currently do this via google forms and view the current month in excel, but i will replace that with this and build out some visual representations, then host on heroku so i can use it in everyday life.  
+i didn't like the budgeting apps out there: mint is awful, clarity was ok but didn't have what i wanted... so, i made my own solution. i currently do this via google forms and view the current month in excel. that works alright and i like that it is a manual process - i need to register each card swipe, both physically and mentally. so, i took a course in web dev during covid spring and decided to build out a better solution for myself. i can only submit feedback to some app for a feature i want, but if it's mine - i can just build it in.  
 
 
 ## todo
@@ -52,3 +53,5 @@ i currently do this via google forms and view the current month in excel, but i 
 
 - [x] comment and tag need to be nullable
 - [x] delete view app - not broad enough to need multiple django apps
+
+
