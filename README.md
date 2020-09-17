@@ -1,10 +1,14 @@
 # expensifly
+## [to home](https://jackforgash.com/)
 
+### description
 a django webapp for manually recording expenses for budgeting purposes.  
-i currently do this via google forms and view the current month in excel, but i will replace that with this and build out some visual representations.  
+i currently do this via google forms and view the current month in excel, but i will replace that with this and build out some visual representations, then host on heroku so i can use it in everyday life.  
 
 
 ## todo
+### general
+- [ ] add selected month to local storage
 ### home
 - [ ] main screen
   - current month total
