@@ -10,6 +10,7 @@ i currently do this via google forms and view the current month in excel, but i 
 ## todo
 ### general
 - [ ] add selected month to local storage
+
 ### home
 - [ ] main screen
   - current month total
