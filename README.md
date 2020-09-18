@@ -10,6 +10,10 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 ## todo
 ### general
 - [ ] add selected month to local storage
+	- [FileSystemStorage](https://docs.djangoproject.com/en/3.1/ref/files/storage/) 
+	- session data in flask
+	- no localStorage was a JS thing --- so, should I add some JS to set the current month
+		- cs50w p2 for reminder of this 
 
 ### home
 - [ ] main screen
