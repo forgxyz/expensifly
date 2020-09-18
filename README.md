@@ -10,10 +10,10 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 ## todo
 ### general
 - [ ] add selected month to local storage
-	- [FileSystemStorage](https://docs.djangoproject.com/en/3.1/ref/files/storage/) 
+	- [FileSystemStorage](https://docs.djangoproject.com/en/3.1/ref/files/storage/)
 	- session data in flask
 	- no localStorage was a JS thing --- so, should I add some JS to set the current month
-		- cs50w p2 for reminder of this 
+		- cs50w p2 for reminder of this
 
 ### home
 - [ ] main screen
@@ -22,12 +22,16 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 - navbar buttons should load whatever the selected month is, as chosen by the dropdown.
 - "home" loads the month overview, view transactions loads is not just for the curr month, portal does the same.
   - add current month button
+- [ ] top 3 categories only showing max, not sum???
+
 
 ### record
 - [ ] option for money in
   - record top line to have a view of cash flow
 - [ ] date accepts str input
   - popup calendar for one click input?
+- [ ] change month does not load on this view
+
 
 ### view
 - [ ] edit tx functionality. See [the save() method](https://docs.djangoproject.com/en/3.0/topics/forms/modelforms/#the-save-method). Edit button next to TX, or pass TX ID into an edit search box to bring up a populated form. Change as needed there.
@@ -39,6 +43,7 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
   - comparison
     - month to month
     - YTD y-o-y
+
 
 ### deployment
 - [ ] login screen? once online i'll want to keep my own stuff secure
@@ -57,5 +62,3 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 
 - [x] comment and tag need to be nullable
 - [x] delete view app - not broad enough to need multiple django apps
-
-

@@ -1,7 +1,7 @@
 {% extends "record/base.html" %}
 {% block body %}
   <div class="container">
-    <h1>Summary - {{ selected_date|date:"F Y" }}</h1>
+    <h1>{{ selected_date|date:"F Y" }}</h1>
     <h2>MTD: ${{ totals.month }}</h2>
 
     <h4>YTD: ${{ totals.year }}</h4>

@@ -4,7 +4,8 @@
   <head>
     <title>expensifly</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static "record/main.css" %}"
+    <link rel="stylesheet" href="{% static "record/main.css" %}">
+        <link rel="shortcut icon" type="image/png" href="{% static "record/favicon.ico" %}"/>
   </head>
 
   <body>
@@ -17,16 +18,16 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a href="/" class="nav-link">overview</a>
+            <a href="{% url 'record:index' %}" class="nav-link">overview</a>
           </li>
           <li class="nav-item">
-            <a href="/record" class="nav-link">record a new expense</a>
+            <a href="{% url 'record:record' %}" class="nav-link">record a new expense</a>
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">view month</a>
           </li>
           <li class ="nav-item">
-            <a href="/view" class="nav-link">view transactions</a>
+            <a href="#" class="nav-link">view transactions</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -34,7 +35,7 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               {% for month in months %}
-                <a href="{% url 'record:view_tx' month.year month.month %}" class="dropdown-item">{{ month|date:"F Y" }}</a><br>
+                <a href="{% url 'record:change_month' month.year month.month %}" class="dropdown-item">{{ month|date:"F Y" }}</a><br>
               {% endfor %}
             </div>
         </ul>

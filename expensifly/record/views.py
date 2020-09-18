@@ -8,9 +8,21 @@ from datetime import date
 from .models import Expense, ExpenseForm
 from .helpers import get_spending
 
-# Create your views here.
+
+def change_month(request, month, year):
+    request.session['SELECTED_YEAR'] = year
+    request.session['SELECTED_MONTH'] = month
+    context = get_spending(request.session['SELECTED_MONTH'], request.session['SELECTED_YEAR'])
+    return render(request, 'record/index.html', context=context)
+
+
 def index(request):
-    context = get_spending()
+    try:
+        request.session['SELECTED_MONTH']
+    except:
+        request.session['SELECTED_MONTH'] = date.today().month
+        request.session['SELECTED_YEAR'] = date.today().year
+    context = get_spending(request.session['SELECTED_MONTH'], request.session['SELECTED_YEAR'])
     return render(request, 'record/index.html', context=context)
 
 
@@ -48,7 +60,5 @@ def save(request):
     # with POST data. This prevents data from being posted twice if a
     # user hits the Back button.
 
-
-def view_tx(request, year=date.today().year, month=date.today().month):
-    context = get_spending()
-    return render(request, 'record/tx_list.html', context=context)
+def transactions(request):
+    return None
