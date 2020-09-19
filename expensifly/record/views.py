@@ -61,4 +61,5 @@ def save(request):
     # user hits the Back button.
 
 def transactions(request):
-    return None
+    context = get_spending(request.session['SELECTED_MONTH'], request.session['SELECTED_YEAR'])
+    return render(request, 'record/tx_list.html', context=context)

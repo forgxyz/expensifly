@@ -9,11 +9,11 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 
 ## todo
 ### general
-- [ ] add selected month to local storage
-	- [FileSystemStorage](https://docs.djangoproject.com/en/3.1/ref/files/storage/)
-	- session data in flask
-	- no localStorage was a JS thing --- so, should I add some JS to set the current month
-		- cs50w p2 for reminder of this
+- [ ] change order of 'change month' -> desc
+- [ ] format of numbers - there has to be a better way to do this.. in the template?
+
+**18 sept** - you were trying to fix the get_spending helper & top cats
+
 
 ### home
 - [ ] main screen
@@ -23,7 +23,7 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 - "home" loads the month overview, view transactions loads is not just for the curr month, portal does the same.
   - add current month button
 - [ ] top 3 categories only showing max, not sum???
-
+	- & make sure they aggregate across method differences
 
 ### record
 - [ ] option for money in
@@ -62,3 +62,8 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 
 - [x] comment and tag need to be nullable
 - [x] delete view app - not broad enough to need multiple django apps
+- [x] add selected month to local storage
+	- [FileSystemStorage](https://docs.djangoproject.com/en/3.1/ref/files/storage/)
+	- session data in flask
+	- no localStorage was a JS thing --- so, should I add some JS to set the current month
+		- cs50w p2 for reminder of this

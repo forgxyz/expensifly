@@ -12,7 +12,7 @@ def get_spending(SELECTED_MONTH, SELECTED_YEAR):
     total_year, total_month = tx_year.aggregate(Sum('amount')), tx_month.aggregate(Sum('amount'))
     totals = {'year': format(round(total_year['amount__sum'],2), ',.2f'), 'month': format(round(total_month['amount__sum'], 2), ',.2f')}
 
-    top_cats = tx_month.values('category__category').annotate(Sum('amount')).order_by('-amount')[:3]
+    top_cats = tx_month.values('category__category').annotate(Sum('amount'))
 
     months = Expense.objects.dates('date', 'month')
 

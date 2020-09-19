@@ -7,7 +7,7 @@
     <h3>top 3 categories</h3>
     <ol>
       {% for cat in top_cats %}
-        <li>{{ cat.category__category }}: ${{ cat.amount__sum }}</li>
+        <li>{{ cat.category__category }}: ${{ cat.amount__sum }} - {{cat}}</li>
       {% endfor %}
     </ol>
 
