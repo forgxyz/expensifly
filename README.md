@@ -9,10 +9,6 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 
 ## todo
 ### general
-- [ ] change order of 'change month' -> desc
-- [ ] format of numbers - there has to be a better way to do this.. in the template?
-
-**18 sept** - you were trying to fix the get_spending helper & top cats
 
 
 ### home
@@ -24,6 +20,7 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
   - add current month button
 - [ ] top 3 categories only showing max, not sum???
 	- & make sure they aggregate across method differences
+  - it's only grouping categories when the date is the same whyyyyyy
 
 ### record
 - [ ] option for money in
@@ -31,7 +28,7 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 - [ ] date accepts str input
   - popup calendar for one click input?
 - [ ] change month does not load on this view
-
+- [ ] pass a message & message type to confirm tx?
 
 ### view
 - [ ] edit tx functionality. See [the save() method](https://docs.djangoproject.com/en/3.0/topics/forms/modelforms/#the-save-method). Edit button next to TX, or pass TX ID into an edit search box to bring up a populated form. Change as needed there.
@@ -67,3 +64,7 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 	- session data in flask
 	- no localStorage was a JS thing --- so, should I add some JS to set the current month
 		- cs50w p2 for reminder of this
+- [x] split out get_spending info
+  - save months to session. load nav data from there instead
+- [x] change order of 'change month' -> desc
+- [x] format of numbers - there has to be a better way to do this.. in the template?

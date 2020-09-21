@@ -1,4 +1,3 @@
-from django.db.models import Sum
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -10,31 +9,29 @@ from .helpers import get_spending
 
 
 def change_month(request, month, year):
-    request.session['SELECTED_YEAR'] = year
-    request.session['SELECTED_MONTH'] = month
-    context = get_spending(request.session['SELECTED_MONTH'], request.session['SELECTED_YEAR'])
+    request.session['SELECTED_DATE'] = date(year, month, 1)
+    context = get_spending(request.session['SELECTED_DATE'])
     return render(request, 'record/index.html', context=context)
 
 
 def index(request):
-    try:
-        request.session['SELECTED_MONTH']
-    except:
-        request.session['SELECTED_MONTH'] = date.today().month
-        request.session['SELECTED_YEAR'] = date.today().year
-    context = get_spending(request.session['SELECTED_MONTH'], request.session['SELECTED_YEAR'])
+    if not request.session.get('initialize', False):
+        request.session['initialize'] = True
+        request.session['MONTHS'] = Expense.objects.dates('date', 'month').order_by('-datefield')
+        request.session['SELECTED_DATE'] = date.today()
+
+    context = get_spending(request.session['SELECTED_DATE'])
     return render(request, 'record/index.html', context=context)
 
 
 def record(request):
+
     form = ExpenseForm()
     return render(request, 'record/record.html', {'form': form})
 
 
 def save(request):
     # save new transaction information to database
-    months = Expense.objects.dates('date', 'month')
-
     if request.method == 'POST':
         # expense submission
         form = ExpenseForm(request.POST)
@@ -48,12 +45,11 @@ def save(request):
             tag = form.cleaned_data['tag']
 
             e = Expense.objects.create(amount=amount, date=date, category=category, method=method, comment=comment, tag=tag)
-            context = {'message': 'Success', 'transaction': e, 'months': months}
-        return render(request, 'record/success.html', context)
+        return HttpResponseRedirect('/')
 
     else:
         form = ExpenseForm()
-    context = {'form': form, 'months': months}
+    context = {'form': form}
     return render(request, 'record/index.html', context)
 
     # Always return an HttpResponseRedirect after successfully dealing
@@ -61,5 +57,5 @@ def save(request):
     # user hits the Back button.
 
 def transactions(request):
-    context = get_spending(request.session['SELECTED_MONTH'], request.session['SELECTED_YEAR'])
+    context = get_spending(request.session['SELECTED_DATE'])
     return render(request, 'record/tx_list.html', context=context)

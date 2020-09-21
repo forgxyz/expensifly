@@ -3,15 +3,18 @@
   <div class="container">
     <h1>home - overview</h1>
 
-    <h2>{{ selected_date|date:"F Y" }} spending: ${{ totals.month }}</h2>
+    <h2>{{ request.session.SELECTED_DATE|date:"F Y" }} spending: ${{ totals.month|floatformat:2 }}</h2>
     <h3>top 3 categories</h3>
     <ol>
       {% for cat in top_cats %}
-        <li>{{ cat.category__category }}: ${{ cat.amount__sum }} - {{cat}}</li>
+        <li>{{ cat.category__category }}: ${{ cat.amount__sum|floatformat:2 }}</li>
       {% endfor %}
     </ol>
 
     <h3>snapshot</h3>
     <p>insert quick-look here</p>
+    <br>
+    <div class="testing">
+    </div>
   </div>
 {% endblock %}

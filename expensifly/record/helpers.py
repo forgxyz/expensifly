@@ -5,16 +5,13 @@ from datetime import date
 from .models import Expense
 
 
-def get_spending(SELECTED_MONTH, SELECTED_YEAR):
-    tx_year = Expense.objects.filter(date__year=SELECTED_YEAR)
-    tx_month = tx_year.filter(date__month=SELECTED_MONTH)
+def get_spending(SELECTED_DATE):
+    tx_year = Expense.objects.filter(date__year=SELECTED_DATE.year)
+    tx_month = tx_year.filter(date__month=SELECTED_DATE.month)
 
-    total_year, total_month = tx_year.aggregate(Sum('amount')), tx_month.aggregate(Sum('amount'))
-    totals = {'year': format(round(total_year['amount__sum'],2), ',.2f'), 'month': format(round(total_month['amount__sum'], 2), ',.2f')}
+    totals = {'year': tx_year.aggregate(Sum('amount'))['amount__sum'], 'month': tx_month.aggregate(Sum('amount'))['amount__sum']}
 
     top_cats = tx_month.values('category__category').annotate(Sum('amount'))
 
-    months = Expense.objects.dates('date', 'month')
-
-    context = {"selected_date": date(SELECTED_YEAR, SELECTED_MONTH, 1), "tx": tx_month, "totals": totals, 'top_cats': top_cats, 'months': months}
+    context = {"tx": tx_month, "totals": totals, 'top_cats': top_cats}
     return context

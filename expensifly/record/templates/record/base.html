@@ -34,7 +34,7 @@
               change month
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              {% for month in months %}
+              {% for month in request.session.MONTHS %}
                 <a href="{% url 'record:change_month' month.year month.month %}" class="dropdown-item">{{ month|date:"F Y" }}</a><br>
               {% endfor %}
             </div>
