@@ -8,7 +8,7 @@ from .models import Expense, ExpenseForm
 from .helpers import get_spending
 
 
-def change_month(request, month, year):
+def change_month(request, year, month):
     request.session['SELECTED_DATE'] = date(year, month, 1)
     context = get_spending(request.session['SELECTED_DATE'])
     return render(request, 'record/index.html', context=context)

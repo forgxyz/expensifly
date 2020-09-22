@@ -9,7 +9,7 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 
 ## todo
 ### general
-
+- [ ] change_month should load whatever screen i am on, not just to the overview. so if on tx list or portal, it changes the data there instead loading to overview
 
 ### home
 - [ ] main screen
