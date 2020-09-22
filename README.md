@@ -13,11 +13,8 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 
 ### home
 - [ ] main screen
-  - current month total
-  - snapshot of that spending by category
-- navbar buttons should load whatever the selected month is, as chosen by the dropdown.
-- "home" loads the month overview, view transactions loads is not just for the curr month, portal does the same.
-  - add current month button
+  - [x] current month total
+  - [ ] snapshot of spending by category
 - [ ] top 3 categories only showing max, not sum???
 	- & make sure they aggregate across method differences
   - it's only grouping categories when the date is the same whyyyyyy
@@ -27,7 +24,6 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
   - record top line to have a view of cash flow
 - [ ] date accepts str input
   - popup calendar for one click input?
-- [ ] change month does not load on this view
 - [ ] pass a message & message type to confirm tx?
 
 ### view
@@ -45,8 +41,13 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 ### deployment
 - [ ] login screen? once online i'll want to keep my own stuff secure
   - limit random registration (heroku limits)
-- [ ] get on heroku for testing during development
+- [ ] get on heroku for testing during development by end of sept
 
+
+### models
+- category: should this just be categorical type? can add new via admin panel if needed
+  - drawbacks to having it in a table?
+  - same with method
 
 ## django questions / to look up
 - global variable for views?
@@ -62,9 +63,13 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 - [x] add selected month to local storage
 	- [FileSystemStorage](https://docs.djangoproject.com/en/3.1/ref/files/storage/)
 	- session data in flask
-	- no localStorage was a JS thing --- so, should I add some JS to set the current month
+	- no localStorage was a JS thing --- so, should I add some JS to set the current month??
 		- cs50w p2 for reminder of this
 - [x] split out get_spending info
   - save months to session. load nav data from there instead
 - [x] change order of 'change month' -> desc
 - [x] format of numbers - there has to be a better way to do this.. in the template?
+- [x] change month does not load on this view
+- "home" loads the month overview, view transactions loads is not just for the curr month, portal does the same.
+  - add current month button
+- navbar buttons should load whatever the selected month is, as chosen by the dropdown.
