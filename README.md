@@ -15,22 +15,19 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 - [ ] main screen
   - [x] current month total
   - [ ] snapshot of spending by category
-- [ ] top 3 categories only showing max, not sum???
-	- & make sure they aggregate across method differences
-  - it's only grouping categories when the date is the same whyyyyyy
 
 ### record
 - [ ] option for money in
   - record top line to have a view of cash flow
 - [ ] date accepts str input
   - popup calendar for one click input?
-- [ ] pass a message & message type to confirm tx?
+
 
 ### view
 - [ ] edit tx functionality. See [the save() method](https://docs.djangoproject.com/en/3.0/topics/forms/modelforms/#the-save-method). Edit button next to TX, or pass TX ID into an edit search box to bring up a populated form. Change as needed there.
 - [ ] filter month by category / dynamic table
 - [ ] portal with more in depth options
-  - **category view**
+  - **category totals/filter**
     - need to have this overview
   - export "selection" as csv? (where selection is the tx data rendered to the screen)
   - comparison
@@ -42,18 +39,12 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 - [ ] login screen? once online i'll want to keep my own stuff secure
   - limit random registration (heroku limits)
 - [ ] get on heroku for testing during development by end of sept
+- [ ] tx list too wide for mobile
 
 
 ### models
-- category: should this just be categorical type? can add new via admin panel if needed
-  - drawbacks to having it in a table?
-  - same with method
 
 ## django questions / to look up
-- global variable for views?
-  - months is used to populate the navbar. can i query that just once? save to browser local storage???
-  - same for current month
-    - the index page & navbar both use current month info
 
 
 ## done
@@ -73,3 +64,14 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 - "home" loads the month overview, view transactions loads is not just for the curr month, portal does the same.
   - add current month button
 - navbar buttons should load whatever the selected month is, as chosen by the dropdown.
+- [x] top 3 categories only showing max, not sum???
+  - & make sure they aggregate across method differences
+  - it's only grouping categories when the date is the same whyyyyyy
+  - idk. using pandas
+- global variable for views?
+  - months is used to populate the navbar. can i query that just once? save to browser local storage???
+  - same for current month
+  - the index page & navbar both use current month info
+- category: should this just be categorical type? can add new via admin panel if needed
+  - drawbacks to having it in a table?
+  - same with method

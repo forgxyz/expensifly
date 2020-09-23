@@ -7,13 +7,13 @@ from datetime import date
 from .models import Expense, ExpenseForm
 from .helpers import get_spending
 
-
+# change SELECTED_DATE
 def change_month(request, year, month):
     request.session['SELECTED_DATE'] = date(year, month, 1)
     context = get_spending(request.session['SELECTED_DATE'])
     return render(request, 'record/index.html', context=context)
 
-
+# load main overview screen. if first load, gather months from db and set SELECTED_DATE to current month
 def index(request):
     if not request.session.get('initialize', False):
         request.session['initialize'] = True
@@ -24,12 +24,18 @@ def index(request):
     return render(request, 'record/index.html', context=context)
 
 
-def record(request):
+# insight portal
+def portal(request):
+    context = {}
+    return render(request, 'record/portal.html', context=context)
 
+
+# load Expense ModelForm
+def record(request):
     form = ExpenseForm()
     return render(request, 'record/record.html', {'form': form})
 
-
+# handle Expense ModelForm submission
 def save(request):
     # save new transaction information to database
     if request.method == 'POST':
@@ -52,6 +58,7 @@ def save(request):
 
         return HttpResponseRedirect('/')
 
+    # if not POST, load empty form
     else:
         form = ExpenseForm()
     context = {'form': form}
@@ -61,6 +68,7 @@ def save(request):
     # with POST data. This prevents data from being posted twice if a
     # user hits the Back button.
 
+# load list of transactions
 def transactions(request):
     context = get_spending(request.session['SELECTED_DATE'])
     return render(request, 'record/tx_list.html', context=context)

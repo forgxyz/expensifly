@@ -6,8 +6,8 @@
     <h2>{{ request.session.SELECTED_DATE|date:"F Y" }} spending: ${{ totals.month|floatformat:2 }}</h2>
     <h3>top 3 categories</h3>
     <ol>
-      {% for cat in top_cats %}
-        <li>{{ cat.category__category }}: ${{ cat.amount__sum|floatformat:2 }}</li>
+      {% for category, amount in top_cats.amount.items %}
+        <li>{{ category }}: ${{ amount|floatformat:0 }}</li>
       {% endfor %}
     </ol>
 

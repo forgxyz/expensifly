@@ -11,6 +11,7 @@ urlpatterns = [
     path('save', views.save, name='save'),
     path('transactions/', views.transactions, name='transactions'),
     path('overview/<int:year>/<int:month>/', views.change_month, name='change_month'),
+    path('portal/', views.portal, name='portal'),
 ]
 
 # in template: {% url 'record:index' %}
