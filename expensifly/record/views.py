@@ -38,13 +38,18 @@ def save(request):
         if form.is_valid():
             # save the input
             amount = form.cleaned_data['amount']
-            date = form.cleaned_data['date']
+            sel_date = form.cleaned_data['date']
             category = form.cleaned_data['category']
             method = form.cleaned_data['method']
             comment = form.cleaned_data['comment']
             tag = form.cleaned_data['tag']
 
-            e = Expense.objects.create(amount=amount, date=date, category=category, method=method, comment=comment, tag=tag)
+            e = Expense.objects.create(amount=amount, date=sel_date, category=category, method=method, comment=comment, tag=tag)
+
+            # if new month - add to nav
+            if date(sel_date.year, sel_date.month, 1) not in request.session['MONTHS']:
+                request.session['MONTHS'] = Expense.objects.dates('date', 'month').order_by('-datefield')
+
         return HttpResponseRedirect('/')
 
     else:
