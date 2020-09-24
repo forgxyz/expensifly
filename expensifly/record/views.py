@@ -44,30 +44,10 @@ def index(request):
             tx = read_frame(transactions_month, fieldnames=['category', 'amount'])
             request.session['top_cats'] = tx.groupby('category').sum().sort_values('amount', ascending=False).to_dict()
 
-        context = {}
+        context = {'message': f'Welcome, {request.user}', 'message_type': 'success'}
         return render(request, 'record/index.html', context=context)
     return HttpResponseRedirect('login')
 
-
-# log user in
-def ulogin(request):
-    if request.method == 'POST':
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
-        if user:
-            login(request, user)
-            return HttpResponseRedirect('/')
-        context = {'message': 'Unable to log in.', 'message_type': 'warning'}
-        return render(request, 'record/login.html', context=context)
-        
-    # otherwise load login screen
-    return render(request, 'record/login.html')
-
-
-def ulogout(request):
-    logout(request)
-    return HttpResponseRedirect('login')
 
 # load Expense ModelForm
 def record(request):
@@ -111,3 +91,24 @@ def save(request):
 def transactions(request):
     context = {}
     return render(request, 'record/tx_list.html', context=context)
+
+
+# log user in
+def ulogin(request):
+    if request.method == 'POST':
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            return HttpResponseRedirect('/')
+        context = {'message': 'Unable to log in.', 'message_type': 'warning'}
+        return render(request, 'record/login.html', context=context)
+
+    # otherwise load login screen
+    return render(request, 'record/login.html')
+
+
+def ulogout(request):
+    logout(request)
+    return HttpResponseRedirect('login')

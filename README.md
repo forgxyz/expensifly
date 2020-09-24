@@ -10,12 +10,12 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 ## todo
 ### general
 - [ ] change_month should load whatever screen i am on, not just to the overview. so if on tx list or portal, it changes the data there instead loading to overview
-- [ ] load data & user permissions
 
-### home
-- [ ] main screen
-  - [x] current month total
-  - [ ] snapshot of spending by category
+
+### auth
+- [ ] fix loading data & user permissions
+= [ ] wrapper requiring login to load any other view
+
 
 ### record
 - [ ] option for money in
@@ -28,9 +28,6 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 - [ ] edit tx functionality. See [the save() method](https://docs.djangoproject.com/en/3.0/topics/forms/modelforms/#the-save-method). Edit button next to TX, or pass TX ID into an edit search box to bring up a populated form. Change as needed there.
 - [ ] filter month by category / dynamic table
 - [ ] portal with more in depth options
-  - **category totals/filter**
-    - need to have this overview
-  - export "selection" as csv? (where selection is the tx data rendered to the screen)
   - comparison
     - month to month
     - YTD y-o-y
@@ -39,7 +36,7 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 ### deployment
 - [ ] get on heroku for testing during development by end of sept
 - [ ] tx list too wide for mobile
-= [ ] login required wrapper?
+
 
 ### models
 - [ ] link tx entries to a user id
@@ -86,3 +83,6 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 - [x] login screen? once online i'll want to keep my own stuff secure
   - limit random registration (heroku limits)
   - yes and set up a test user for the current test data
+- [x] main screen
+  - [x] current month total
+  - [x] snapshot of spending by category
