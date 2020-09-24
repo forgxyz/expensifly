@@ -10,7 +10,7 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 ## todo
 ### general
 - [ ] change_month should load whatever screen i am on, not just to the overview. so if on tx list or portal, it changes the data there instead loading to overview
-
+- [ ] load data & user permissions
 
 ### home
 - [ ] main screen
@@ -37,18 +37,18 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 
 
 ### deployment
-- [ ] login screen? once online i'll want to keep my own stuff secure
-  - limit random registration (heroku limits)
 - [ ] get on heroku for testing during development by end of sept
 - [ ] tx list too wide for mobile
-
+= [ ] login required wrapper?
 
 ### models
+- [ ] link tx entries to a user id
+
 
 ## other
 ### notes
 - #181a1b looked good as a dark bg for body
-
+- maybe change how ExpenseForm is deployed to add classes to the form elements. make it look a little nicer.
 
 ### django questions / to look up
 
@@ -82,3 +82,7 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
   - drawbacks to having it in a table?
   - same with method
 - [x] make fewer repeated calls to the database. moving from overview to tx_list shouldn't send the same queries... unnecessarily slow. cache them? use session?
+- [x] hide nav items if logged out
+- [x] login screen? once online i'll want to keep my own stuff secure
+  - limit random registration (heroku limits)
+  - yes and set up a test user for the current test data

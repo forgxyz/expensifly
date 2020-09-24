@@ -1,0 +1,14 @@
+{% extends "record/base.html" %}
+{% block body %}
+  <div class="container">
+    <h1>please log in to use the service</h1>
+
+    <form action="{% url 'record:login' %}" method="post">
+      {% csrf_token %}
+      <input type="text" name="username" placeholder="Username">
+      <input type="password" name="password" placeholder="Password">
+      <button type="submit">Log in</button>
+    </form>
+    
+  </div>
+{% endblock %}
