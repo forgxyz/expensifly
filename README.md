@@ -11,6 +11,7 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 ### general
 - [ ] change_month should load whatever screen i am on, not just to the overview. so if on tx list or portal, it changes the data there instead loading to overview
 
+
 ### home
 - [ ] main screen
   - [x] current month total
@@ -44,7 +45,12 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 
 ### models
 
-## django questions / to look up
+## other
+### notes
+- #181a1b looked good as a dark bg for body
+
+
+### django questions / to look up
 
 
 ## done
@@ -75,3 +81,4 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 - category: should this just be categorical type? can add new via admin panel if needed
   - drawbacks to having it in a table?
   - same with method
+- [x] make fewer repeated calls to the database. moving from overview to tx_list shouldn't send the same queries... unnecessarily slow. cache them? use session?

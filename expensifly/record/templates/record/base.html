@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 {% load static %}
+{% load humanize %}
 <html>
   <head>
     <title>expensifly</title>
-    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"> -->
     <link rel="stylesheet" href="{% static "record/bootstrap.min.css" %}">
     <link rel="stylesheet" href="{% static "record/main.css" %}">
-        <link rel="shortcut icon" type="image/png" href="{% static "record/favicon.ico" %}"/>
+    <link rel="shortcut icon" type="image/png" href="{% static "record/favicon.ico" %}"/>
   </head>
 
   <body>
-    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar sticky-top navbar-expand-xl navbar-dark bg-primary">
       <a class="navbar-brand" href="{% url 'record:index' %}">expensifly</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -24,9 +24,6 @@
           <li class="nav-item">
             <a href="{% url 'record:record' %}" class="nav-link">record a new expense</a>
           </li>
-          <li class="nav-item">
-            <a href="{% url 'record:portal' %}" class="nav-link">view month / portal<!-- not yet implemented --></a>
-          </li>
           <li class ="nav-item">
             <a href="{% url 'record:transactions' %}" class="nav-link">view transactions</a>
           </li>
@@ -35,15 +32,12 @@
               change month
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              {% for month in request.session.MONTHS %}
+              {% for month in request.session.months %}
                 <a href="{% url 'record:change_month' month.year month.month %}" class="dropdown-item">{{ month|date:"F Y" }}</a><br>
               {% endfor %}
             </div>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="text" placeholder="Search">
-          <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-        </form>
+
       </div>
     </nav>
     <div style="padding-bottom: 15px;"></div>

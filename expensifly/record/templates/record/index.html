@@ -1,20 +1,20 @@
 {% extends "record/base.html" %}
+{% load humanize %}
 {% block body %}
   <div class="container">
-    <h1>home - overview</h1>
+    <h1>{{request.session.selected_date|date:"Y" }} total: ${{ request.session.total_year|floatformat:0|intcomma }}</h1>
 
-    <h2>{{ request.session.SELECTED_DATE|date:"F Y" }} spending: ${{ totals.month|floatformat:2 }}</h2>
-    <h3>top 3 categories</h3>
+    <h2>{{ request.session.selected_date|date:"F" }} spending: ${{ request.session.total_month|floatformat:0|intcomma }}</h2>
+
+    <h4>top categories</h4>
     <ol>
-      {% for category, amount in top_cats.amount.items %}
-        <li>{{ category }}: ${{ amount|floatformat:0 }}</li>
+      {% for category, amount in request.session.top_cats.amount.items %}
+        <li>{{ category }}: ${{ amount|floatformat:0|intcomma }}</li>
       {% endfor %}
     </ol>
 
-    <h3>snapshot</h3>
+    <h4>snapshot</h4>
     <p>insert quick-look here</p>
     <br>
-    <div class="testing">
-    </div>
   </div>
 {% endblock %}

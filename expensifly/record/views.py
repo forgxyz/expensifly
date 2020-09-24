@@ -1,39 +1,55 @@
+from django.db.models import Sum
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
 from datetime import date
+from django_pandas.io import read_frame
 
 from .models import Expense, ExpenseForm
-from .helpers import get_spending
 
 # change SELECTED_DATE
 def change_month(request, year, month):
-    request.session['SELECTED_DATE'] = date(year, month, 1)
-    context = get_spending(request.session['SELECTED_DATE'])
+    request.session['selected_date'] = date(year, month, 1)
+
+    transactions_month = Expense.objects.filter(date__year=request.session['selected_date'].year).filter(date__month=request.session['selected_date'].month)
+    request.session['transaction_list'] = transactions_month
+    request.session['total_month'] = transactions_month.aggregate(Sum('amount'))['amount__sum']
+
+    request.session['total_year'] = Expense.objects.filter(date__year=request.session['selected_date'].year).aggregate(Sum('amount'))['amount__sum']
+
+    tx = read_frame(transactions_month, fieldnames=['category', 'amount'])
+    request.session['top_cats'] = tx.groupby('category').sum().sort_values('amount', ascending=False).to_dict()
+
+    context = {}
     return render(request, 'record/index.html', context=context)
+
 
 # load main overview screen. if first load, gather months from db and set SELECTED_DATE to current month
 def index(request):
     if not request.session.get('initialize', False):
         request.session['initialize'] = True
-        request.session['MONTHS'] = Expense.objects.dates('date', 'month').order_by('-datefield')
-        request.session['SELECTED_DATE'] = date.today()
 
-    context = get_spending(request.session['SELECTED_DATE'])
-    return render(request, 'record/index.html', context=context)
+        request.session['months'] = Expense.objects.dates('date', 'month').order_by('-datefield')
+        request.session['selected_date'] = date.today()
 
+        transactions_month = Expense.objects.filter(date__year=request.session['selected_date'].year).filter(date__month=request.session['selected_date'].month)
+        request.session['transaction_list'] = transactions_month
+        request.session['total_month'] = transactions_month.aggregate(Sum('amount'))['amount__sum']
 
-# insight portal
-def portal(request):
+        request.session['total_year'] = Expense.objects.filter(date__year=request.session['selected_date'].year).aggregate(Sum('amount'))['amount__sum']
+
+        tx = read_frame(transactions_month, fieldnames=['category', 'amount'])
+        request.session['top_cats'] = tx.groupby('category').sum().sort_values('amount', ascending=False).to_dict()
+
     context = {}
-    return render(request, 'record/portal.html', context=context)
+    return render(request, 'record/index.html', context=context)
 
 
 # load Expense ModelForm
 def record(request):
-    form = ExpenseForm()
-    return render(request, 'record/record.html', {'form': form})
+    context = {'form': ExpenseForm()}
+    return render(request, 'record/record.html', context=context)
 
 # handle Expense ModelForm submission
 def save(request):
@@ -70,5 +86,5 @@ def save(request):
 
 # load list of transactions
 def transactions(request):
-    context = get_spending(request.session['SELECTED_DATE'])
+    context = {}
     return render(request, 'record/tx_list.html', context=context)
