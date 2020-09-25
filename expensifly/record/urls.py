@@ -10,7 +10,7 @@ urlpatterns = [
     path('record', views.record, name='record'),
     path('save', views.save, name='save'),
     path('transactions', views.transactions, name='transactions'),
-    path('overview/<int:year>/<int:month>', views.change_month, name='change_month'),
+    path('<int:year>/<int:month>', views.set_month, name='change_month'),
     path('login/', views.ulogin, name='login'),
     path('logout', views.ulogout, name='logout'),
 ]

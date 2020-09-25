@@ -9,8 +9,9 @@ from django_pandas.io import read_frame
 
 from .models import Expense, ExpenseForm
 
-# change SELECTED_DATE
-def change_month(request, year, month):
+# change selected_date
+def set_month(request, year=date.today().year, month=date.today().month):
+    # only load for this user id
     request.session['selected_date'] = date(year, month, 1)
 
     transactions_month = Expense.objects.filter(date__year=request.session['selected_date'].year).filter(date__month=request.session['selected_date'].month)
@@ -22,8 +23,7 @@ def change_month(request, year, month):
     tx = read_frame(transactions_month, fieldnames=['category', 'amount'])
     request.session['top_cats'] = tx.groupby('category').sum().sort_values('amount', ascending=False).to_dict()
 
-    context = {}
-    return render(request, 'record/index.html', context=context)
+    return HttpResponseRedirect(reverse('record:index'))
 
 
 # load main overview screen. if first load, gather months from db and set SELECTED_DATE to current month
@@ -31,22 +31,10 @@ def index(request):
     if request.user.is_authenticated:
         if not request.session.get('initialize', False):
             request.session['initialize'] = True
-
             request.session['months'] = Expense.objects.dates('date', 'month').order_by('-datefield')
-            request.session['selected_date'] = date.today()
-
-            transactions_month = Expense.objects.filter(date__year=request.session['selected_date'].year).filter(date__month=request.session['selected_date'].month)
-            request.session['transaction_list'] = transactions_month
-            request.session['total_month'] = transactions_month.aggregate(Sum('amount'))['amount__sum']
-
-            request.session['total_year'] = Expense.objects.filter(date__year=request.session['selected_date'].year).aggregate(Sum('amount'))['amount__sum']
-
-            tx = read_frame(transactions_month, fieldnames=['category', 'amount'])
-            request.session['top_cats'] = tx.groupby('category').sum().sort_values('amount', ascending=False).to_dict()
-
-        context = {'message': f'Welcome, {request.user}', 'message_type': 'success'}
-        return render(request, 'record/index.html', context=context)
-    return HttpResponseRedirect('login')
+            set_month(request)
+        return render(request, 'record/index.html')
+    return HttpResponseRedirect(reverse('record:login'))
 
 
 # load Expense ModelForm
@@ -71,17 +59,11 @@ def save(request):
 
             e = Expense.objects.create(amount=amount, date=sel_date, category=category, method=method, comment=comment, tag=tag)
 
-            # if new month - add to nav
-            if date(sel_date.year, sel_date.month, 1) not in request.session['months']:
-                request.session['months'] = Expense.objects.dates('date', 'month').order_by('-datefield')
+            set_month(request)
+        return HttpResponseRedirect(reverse('record:index'))
 
-        return HttpResponseRedirect('/')
-
-    # if not POST, load empty form
-    else:
-        form = ExpenseForm()
-    context = {'form': form}
-    return render(request, 'record/index.html', context)
+    # if not POST, redirect to form load
+    return HttpResponseRedirect(reverse('record:record'))
 
     # Always return an HttpResponseRedirect after successfully dealing
     # with POST data. This prevents data from being posted twice if a
@@ -101,7 +83,8 @@ def ulogin(request):
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
-            return HttpResponseRedirect('/')
+            # context = {'message': f'Welcome, {request.user}', 'message_type': 'success'}
+            return HttpResponseRedirect(reverse('record:index'))
         context = {'message': 'Unable to log in.', 'message_type': 'warning'}
         return render(request, 'record/login.html', context=context)
 
@@ -111,4 +94,4 @@ def ulogin(request):
 
 def ulogout(request):
     logout(request)
-    return HttpResponseRedirect('login')
+    return HttpResponseRedirect(reverse('record:login'))

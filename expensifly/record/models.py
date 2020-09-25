@@ -1,5 +1,9 @@
-from django.db import models
 from django import forms
+from django.db import models
+<<<<<<< HEAD
+from django import forms
+=======
+>>>>>>> remodel
 from django.utils import timezone
 
 # Create your models here.
@@ -46,5 +50,9 @@ class ExpenseForm(forms.ModelForm):
         fields = ['amount', 'date', 'category', 'method', 'comment', 'tag']
         widgets = {
             'amount': forms.NumberInput(attrs={'class': 'form-control'}),
-            'date': forms.DateInput(attrs={'class': 'form-control'})
+            'date': forms.DateInput(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+            'method': forms.Select(attrs={'class': 'form-control'}),
+            'comment': forms.TextInput(attrs={'class': 'form-control'}),
+            'tag': forms.TextInput(attrs={'class': 'form-control'})
         }
