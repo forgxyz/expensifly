@@ -6,9 +6,16 @@
 
     <form action="{% url 'record:edit' tx_id %}" method="post">
       {% csrf_token %}
-      {{ form.as_p }}
+      <div class="form-group">
+        {{ form.as_p }}
+      </div>
+
       <button type="submit" class="btn btn-outline-info">Submit Changes</button>
-      <button class="btn btn-outline-danger">Delete</button>
+    </form>
+    <hr>
+    <form action="{% url 'record:delete' tx_id %}" method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-outline-danger">Delete - THIS CANNOT BE UNDONE</button>
     </form>
   </div>
 {% endblock %}

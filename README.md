@@ -11,11 +11,12 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 
 ## todo
 ### general
-
+- [ ] split out update month and refresh transactions
 
 ### auth
 - [ ] add permission requirement for edit and delete
-= [ ] finish delete()
+  - make sure another user cannot plug in a number after edit or delete
+- [ ] finish delete()
 
 ### record
 - [ ] option for money in

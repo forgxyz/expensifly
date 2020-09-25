@@ -12,8 +12,20 @@ from .models import Expense, ExpenseForm
 
 
 @login_required
-def delete(request, tx_id):
-    return None
+def delete(request, tx_id=None):
+    if tx_id == None:
+        return HttpResponseRedirect(reverse('record:index'))
+
+    if request.method == 'POST':
+        if request.user == Expense.objects.get(pk=tx_id).user:
+            Expense.objects.get(pk=tx_id).delete()
+            set_month(request, request.session['selected_date'].year, request.session['selected_date'].month)
+            return HttpResponseRedirect(reverse('record:transactions'))
+
+        context = {'form': form, 'tx_id': tx_id, 'message': 'Error, user id mismatch.', 'message_type': 'danger'}
+        return render(request, 'record/edit.html', context=context)
+
+    return HttpResponseRedirect(reverse('record:index'))
 
 
 @login_required
@@ -37,7 +49,7 @@ def edit(request, tx_id):
 def index(request):
     if not request.session.get('initialize', False):
         request.session['initialize'] = True
-        set_month(request)
+        set_month(request, date.today().year, date.today().month)
     return render(request, 'record/index.html')
 
 
@@ -81,7 +93,7 @@ def save(request):
 
 # change selected_date
 @login_required
-def set_month(request, year=date.today().year, month=date.today().month):
+def set_month(request, year, month):
     # only load for this user id
     request.session['selected_date'] = date(year, month, 1)
 
