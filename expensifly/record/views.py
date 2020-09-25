@@ -11,7 +11,7 @@ from .models import Expense, ExpenseForm
 
 # change selected_date
 def set_month(request, year=date.today().year, month=date.today().month):
-    # only load for this user id 
+    # only load for this user id
     request.session['selected_date'] = date(year, month, 1)
 
     transactions_month = Expense.objects.filter(date__year=request.session['selected_date'].year).filter(date__month=request.session['selected_date'].month)
@@ -59,10 +59,7 @@ def save(request):
 
             e = Expense.objects.create(amount=amount, date=sel_date, category=category, method=method, comment=comment, tag=tag)
 
-            # if new month - add to nav
-            if date(sel_date.year, sel_date.month, 1) not in request.session['months']:
-                request.session['months'] = Expense.objects.dates('date', 'month').order_by('-datefield')
-
+            set_month(request)
         return HttpResponseRedirect(reverse('record:index'))
 
     # if not POST, redirect to form load

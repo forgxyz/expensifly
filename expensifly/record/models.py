@@ -53,7 +53,4 @@ class ExpenseForm(forms.ModelForm):
     class Meta:
         model = Expense
         fields = ['amount', 'date', 'category', 'method', 'comment', 'tag']
-        # date = forms.DateField(
-        #     widget=forms.DateInput(format='%m/%d/%Y'),
-        #     input_formats=('%m/%d/%Y', )
-        # )
+        
