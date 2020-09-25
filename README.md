@@ -13,7 +13,7 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 
 ### auth
 - [ ] fix loading data & user permissions
-= [ ] wrapper requiring login to load any other view
+- [ ] wrapper requiring login to load any other view
 
 
 ### record

@@ -41,16 +41,14 @@ class Expense(models.Model):
 
 
 class ExpenseForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['amount'].widget.attrs.update({'class': 'form-control'})
-        self.fields['date'].widget.attrs.update({'class': 'form-control', 'type': 'date'})
-        self.fields['category'].widget.attrs.update({'class': 'form-control'})
-        self.fields['method'].widget.attrs.update({'class': 'form-control'})
-        self.fields['comment'].widget.attrs.update({'class': 'form-control'})
-        self.fields['tag'].widget.attrs.update({'class': 'form-control'})
-
     class Meta:
         model = Expense
         fields = ['amount', 'date', 'category', 'method', 'comment', 'tag']
-        
+        widgets = {
+            'amount': forms.NumberInput(attrs={'class': 'form-control'}),
+            'date': forms.DateInput(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+            'method': forms.Select(attrs={'class': 'form-control'}),
+            'comment': forms.TextInput(attrs={'class': 'form-control'}),
+            'tag': forms.TextInput(attrs={'class': 'form-control'})
+        }
