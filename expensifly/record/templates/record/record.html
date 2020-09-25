@@ -7,7 +7,7 @@
     <form action="{% url 'record:save' %}" method="post">
       {% csrf_token %}
       {{ form.as_p }}
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn btn-outline-success">Submit</button>
     </form>
   </div>
 {% endblock %}

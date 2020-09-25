@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import Sum
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -9,40 +10,47 @@ from django_pandas.io import read_frame
 
 from .models import Expense, ExpenseForm
 
-# change selected_date
-def set_month(request, year=date.today().year, month=date.today().month):
-    # only load for this user id
-    request.session['selected_date'] = date(year, month, 1)
 
-    transactions_month = Expense.objects.filter(date__year=request.session['selected_date'].year).filter(date__month=request.session['selected_date'].month)
-    request.session['transaction_list'] = transactions_month
-    request.session['total_month'] = transactions_month.aggregate(Sum('amount'))['amount__sum']
-
-    request.session['total_year'] = Expense.objects.filter(date__year=request.session['selected_date'].year).aggregate(Sum('amount'))['amount__sum']
-
-    tx = read_frame(transactions_month, fieldnames=['category', 'amount'])
-    request.session['top_cats'] = tx.groupby('category').sum().sort_values('amount', ascending=False).to_dict()
-
-    return HttpResponseRedirect(reverse('record:index'))
+@login_required
+def delete(request, tx_id):
+    return None
 
 
-# load main overview screen. if first load, gather months from db and set SELECTED_DATE to current month
+@login_required
+def edit(request, tx_id):
+    e = Expense.objects.get(pk=tx_id)
+    form = ExpenseForm(instance=e)
+    if request.method == 'POST':
+        form = ExpenseForm(request.POST, instance=e)
+        if form.is_valid():
+            form.save()
+            set_month(request, form.cleaned_data['date'].year, form.cleaned_data['date'].month)
+            return HttpResponseRedirect(reverse('record:transactions'))
+        context = {'form': form, 'tx_id': tx_id, 'message': 'Error, invalid input.', 'message_type': 'danger'}
+        return render(request, 'record/edit.html', context=context)
+    context = {'form': form, 'tx_id': tx_id}
+    return render(request, 'record/edit.html', context=context)
+
+
+# load main overview screen. redirect to login if needed. set to current month
+@login_required
 def index(request):
-    if request.user.is_authenticated:
-        if not request.session.get('initialize', False):
-            request.session['initialize'] = True
-            request.session['months'] = Expense.objects.dates('date', 'month').order_by('-datefield')
-            set_month(request)
-        return render(request, 'record/index.html')
-    return HttpResponseRedirect(reverse('record:login'))
+    if not request.session.get('initialize', False):
+        request.session['initialize'] = True
+        set_month(request)
+    return render(request, 'record/index.html')
 
 
 # load Expense ModelForm
+@login_required
 def record(request):
     context = {'form': ExpenseForm()}
     return render(request, 'record/record.html', context=context)
 
+
 # handle Expense ModelForm submission
+@login_required
+@permission_required('record.add_expense')
 def save(request):
     # save new transaction information to database
     if request.method == 'POST':
@@ -57,9 +65,10 @@ def save(request):
             comment = form.cleaned_data['comment']
             tag = form.cleaned_data['tag']
 
-            e = Expense.objects.create(amount=amount, date=sel_date, category=category, method=method, comment=comment, tag=tag)
+            e = Expense.objects.create(amount=amount, date=sel_date, category=category, method=method, comment=comment, tag=tag, user=request.user)
 
-            set_month(request)
+            # change to new month, if different from current. also adds new month to navbar
+            set_month(request, sel_date.year, sel_date.month)
         return HttpResponseRedirect(reverse('record:index'))
 
     # if not POST, redirect to form load
@@ -69,7 +78,30 @@ def save(request):
     # with POST data. This prevents data from being posted twice if a
     # user hits the Back button.
 
+
+# change selected_date
+@login_required
+def set_month(request, year=date.today().year, month=date.today().month):
+    # only load for this user id
+    request.session['selected_date'] = date(year, month, 1)
+
+    transactions_month = Expense.objects.filter(user=request.user).filter(date__year=request.session['selected_date'].year).filter(date__month=request.session['selected_date'].month)
+    request.session['transaction_list'] = transactions_month
+    request.session['total_month'] = transactions_month.aggregate(Sum('amount'))['amount__sum']
+
+    request.session['total_year'] = Expense.objects.filter(user=request.user).filter(date__year=request.session['selected_date'].year).aggregate(Sum('amount'))['amount__sum']
+
+    tx = read_frame(transactions_month, fieldnames=['category', 'amount'])
+    request.session['top_cats'] = tx.groupby('category').sum().sort_values('amount', ascending=False).to_dict()
+
+    if month not in request.session.get('months', []):
+        request.session['months'] = Expense.objects.filter(user=request.user).dates('date', 'month').order_by('-datefield')
+
+    return HttpResponseRedirect(reverse('record:index'))
+
+
 # load list of transactions
+@login_required
 def transactions(request):
     context = {}
     return render(request, 'record/tx_list.html', context=context)
@@ -92,6 +124,7 @@ def ulogin(request):
     return render(request, 'record/login.html')
 
 
+@login_required
 def ulogout(request):
     logout(request)
     return HttpResponseRedirect(reverse('record:login'))

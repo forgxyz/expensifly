@@ -21,7 +21,7 @@
           <td>{{ item.category }}</td>
           <td>{{ item.method }}</td>
           <td>{{ item.comment }}</td>
-          <td><a href="#" class="btn btn-outline-primary">edit</a></td>
+          <td><a href="{% url 'record:edit' item.id %}" class="btn btn-outline-primary">edit</a></td>
         </tr>
       {% endfor %}
     </table>

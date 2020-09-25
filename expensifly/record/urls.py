@@ -13,5 +13,6 @@ urlpatterns = [
     path('<int:year>/<int:month>', views.set_month, name='change_month'),
     path('login/', views.ulogin, name='login'),
     path('logout', views.ulogout, name='logout'),
+    path('edit/<int:tx_id>', views.edit, name='edit'),
 ]
 # in template: {% url 'record:index' %}

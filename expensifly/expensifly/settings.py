@@ -128,3 +128,5 @@ STATIC_URL = '/static/'
 
 # Set serializer
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+LOGIN_URL = '/login'

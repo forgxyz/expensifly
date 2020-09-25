@@ -5,26 +5,26 @@
 ### description
 a django webapp for manually recording expenses for budgeting purposes.  
 i didn't like the budgeting apps out there: mint is awful, clarity was ok but didn't have what i wanted... so, i made my own solution. i currently do this via google forms and view the current month in excel. that works alright and i like that it is a manual process - i need to register each card swipe, both physically and mentally. so, i took a course in web dev during covid spring and decided to build out a better solution for myself. i can only submit feedback to some app for a feature i want, but if it's mine - i can just build it in.  
-
+*log in to the test account to see how it works:*  
+*un: testuser*  
+*pw: banana4g*  
 
 ## todo
 ### general
 
 
 ### auth
-- [ ] fix loading data & user permissions
-- [ ] wrapper requiring login to load any other view
-
+- [ ] add permission requirement for edit and delete
+= [ ] finish delete()
 
 ### record
 - [ ] option for money in
   - record top line to have a view of cash flow
 - [ ] date accepts str input
   - popup calendar for one click input?
-  - date picker
+  - datepicker
 
 ### view
-- [ ] edit tx functionality. See [the save() method](https://docs.djangoproject.com/en/3.0/topics/forms/modelforms/#the-save-method). Edit button next to TX, or pass TX ID into an edit search box to bring up a populated form. Change as needed there.
 - [ ] filter month by category / dynamic table
 - [ ] portal with more in depth options
   - comparison
@@ -85,3 +85,6 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 - [x] main screen
   - [x] current month total
   - [x] snapshot of spending by category
+- [x] decorator/wrapper requiring login to load any other view
+- [x] fix loading data & user permissions
+- [x] edit tx functionality. See [the save() method](https://docs.djangoproject.com/en/3.0/topics/forms/modelforms/#the-save-method). Edit button next to TX, or pass TX ID into an edit search box to bring up a populated form. Change as needed there.

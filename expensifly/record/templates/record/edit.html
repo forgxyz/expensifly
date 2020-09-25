@@ -1,0 +1,14 @@
+{% extends "record/base.html" %}
+{% block body %}
+
+  <div class="container">
+    <h1>edit expense</h1>
+
+    <form action="{% url 'record:edit' tx_id %}" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-outline-info">Submit Changes</button>
+      <button class="btn btn-outline-danger">Delete</button>
+    </form>
+  </div>
+{% endblock %}
