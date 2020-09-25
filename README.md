@@ -9,7 +9,6 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 
 ## todo
 ### general
-- [ ] change_month should load whatever screen i am on, not just to the overview. so if on tx list or portal, it changes the data there instead loading to overview
 
 
 ### auth
@@ -22,7 +21,7 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
   - record top line to have a view of cash flow
 - [ ] date accepts str input
   - popup calendar for one click input?
-
+  - date picker
 
 ### view
 - [ ] edit tx functionality. See [the save() method](https://docs.djangoproject.com/en/3.0/topics/forms/modelforms/#the-save-method). Edit button next to TX, or pass TX ID into an edit search box to bring up a populated form. Change as needed there.
