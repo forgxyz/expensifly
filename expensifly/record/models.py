@@ -1,5 +1,5 @@
 from django.db import models
-from django.forms import ModelForm
+from django import forms
 from django.utils import timezone
 
 # Create your models here.
@@ -35,12 +35,16 @@ class Expense(models.Model):
 
     class Meta:
         ordering = ['date']
-        
+
     def __str__(self):
         return f"${self.amount} on {self.date}, {self.category} - {self.comment}"
 
 
-class ExpenseForm(ModelForm):
+class ExpenseForm(forms.ModelForm):
     class Meta:
         model = Expense
         fields = ['amount', 'date', 'category', 'method', 'comment', 'tag']
+        widgets = {
+            'amount': forms.NumberInput(attrs={'class': 'form-control'}),
+            'date': forms.DateInput(attrs={'class': 'form-control'})
+        }
