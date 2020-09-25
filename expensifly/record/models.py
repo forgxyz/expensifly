@@ -1,9 +1,6 @@
 from django import forms
 from django.db import models
-<<<<<<< HEAD
-from django import forms
-=======
->>>>>>> remodel
+
 from django.utils import timezone
 
 # Create your models here.
