@@ -14,9 +14,6 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 - [ ] split out update month and refresh transactions
 
 ### auth
-- [ ] add permission requirement for edit and delete
-  - make sure another user cannot plug in a number after edit or delete
-- [ ] finish delete()
 
 ### record
 - [ ] option for money in
@@ -39,13 +36,12 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 
 
 ### models
-- [ ] link tx entries to a user id
 
 
 ## other
 ### notes
 - #181a1b looked good as a dark bg for body
-- maybe change how ExpenseForm is deployed to add classes to the form elements. make it look a little nicer.
+
 
 ### django questions / to look up
 
@@ -86,6 +82,10 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 - [x] main screen
   - [x] current month total
   - [x] snapshot of spending by category
+- [x] link tx entries to a user id
 - [x] decorator/wrapper requiring login to load any other view
 - [x] fix loading data & user permissions
 - [x] edit tx functionality. See [the save() method](https://docs.djangoproject.com/en/3.0/topics/forms/modelforms/#the-save-method). Edit button next to TX, or pass TX ID into an edit search box to bring up a populated form. Change as needed there.
+- [x] add permission requirement for edit and delete
+- make sure another user cannot plug in a number after edit or delete
+- [x] finish delete()

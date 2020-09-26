@@ -11,7 +11,7 @@
 
   <body>
     <nav class="navbar sticky-top navbar-expand-xl navbar-dark bg-primary">
-      <a class="navbar-brand" href="{% url 'record:index' %}">expensifly</a>
+      <a class="navbar-brand" href="{% url 'record:index' %}">{% if request.user.is_authenticated %}{{ request.user }}{% else %}expensifly{% endif %}</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -55,7 +55,7 @@
     {% endblock %}
 
     <div style="padding-bottom: 30px;"></div>
-    
+
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>

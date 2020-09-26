@@ -11,10 +11,21 @@ from django_pandas.io import read_frame
 from .models import Expense, ExpenseForm
 
 
+# load current month tx for selected category
 @login_required
+def category(request, category):
+    return None
+
+
+@login_required
+@permission_required('record.delete_expense', login_url='record:transactions')
 def delete(request, tx_id=None):
-    if tx_id == None:
-        return HttpResponseRedirect(reverse('record:index'))
+    # if no tx_id, tx_id does not exist or user mismatch then do not process request
+    try:
+        if tx_id == None or request.user != Expense.objects.get(pk=tx_id).user:
+            return HttpResponseRedirect(reverse('record:index'))
+    except:
+            return HttpResponseRedirect(reverse('record:index'))
 
     if request.method == 'POST':
         if request.user == Expense.objects.get(pk=tx_id).user:
@@ -29,9 +40,17 @@ def delete(request, tx_id=None):
 
 
 @login_required
-def edit(request, tx_id):
+@permission_required('record.edit_expense', login_url='record:transactions')
+def edit(request, tx_id=None):
+    # if no tx_id, tx_id does not exist or user mismatch then do not process request
+    try:
+        if tx_id == None or request.user != Expense.objects.get(pk=tx_id).user:
+            return HttpResponseRedirect(reverse('record:index'))
+    except:
+            return HttpResponseRedirect(reverse('record:index'))
+
     e = Expense.objects.get(pk=tx_id)
-    form = ExpenseForm(instance=e)
+
     if request.method == 'POST':
         form = ExpenseForm(request.POST, instance=e)
         if form.is_valid():
@@ -40,6 +59,8 @@ def edit(request, tx_id):
             return HttpResponseRedirect(reverse('record:transactions'))
         context = {'form': form, 'tx_id': tx_id, 'message': 'Error, invalid input.', 'message_type': 'danger'}
         return render(request, 'record/edit.html', context=context)
+
+    form = ExpenseForm(instance=e)
     context = {'form': form, 'tx_id': tx_id}
     return render(request, 'record/edit.html', context=context)
 
@@ -62,7 +83,7 @@ def record(request):
 
 # handle Expense ModelForm submission
 @login_required
-@permission_required('record.add_expense')
+@permission_required('record.add_expense', login_url='record:transactions')
 def save(request):
     # save new transaction information to database
     if request.method == 'POST':
