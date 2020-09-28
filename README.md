@@ -12,6 +12,7 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 ## todo
 ### general
 - [ ] split out update month and refresh transactions
+- [caching](https://docs.djangoproject.com/en/3.0/topics/cache/) instead of session storage? pros/cons/best practice?
 
 ### auth
 
