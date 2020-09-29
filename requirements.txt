@@ -1,4 +1,7 @@
 django
+dj-database-url
 django-heroku
 django-pandas
 gunicorn
+python-dotenv
+psycopg2-binary

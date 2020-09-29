@@ -34,7 +34,7 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 ### deployment
 - [ ] get on heroku for testing during development by end of sept
 - [ ] tx list too wide for mobile
-
+- [ ] test db
 
 ### models
 
