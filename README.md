@@ -5,7 +5,7 @@
 ### description
 a django webapp for manually recording expenses for budgeting purposes.  
 i didn't like the budgeting apps out there: mint is awful, clarity was ok but didn't have what i wanted... so, i made my own solution. i currently do this via google forms and view the current month in excel. that works alright and i like that it is a manual process - i need to register each card swipe, both physically and mentally. so, i took a course in web dev during covid spring and decided to build out a better solution for myself. i can only submit feedback to some app for a feature i want, but if it's mine - i can just build it in.  
-*log in to the test account to see how it works:*  
+**try it out:**  
 *un: testuser*  
 *pw: banana4g*  
 
@@ -22,6 +22,7 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 - [ ] date accepts str input
   - popup calendar for one click input?
   - datepicker
+  - admin panel uses one
 
 ### view
 - [ ] filter month by category / dynamic table
@@ -35,6 +36,7 @@ i didn't like the budgeting apps out there: mint is awful, clarity was ok but di
 - [ ] get on heroku for testing during development by end of sept
 - [ ] tx list too wide for mobile
 - [ ] test db
+- [ ] https
 
 ### models
 
