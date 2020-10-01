@@ -15,7 +15,7 @@ from .models import Category, Expense, ExpenseForm
 @login_required
 def category(request, category):
     cat = Category.objects.get(category=category)
-    tx = Expense.objects.filter(date__year=request.session['selected_date'].year).filter(date__month=request.session['selected_date'].month).filter(category=cat)
+    tx = Expense.objects.filter(user=request.user).filter(date__year=request.session['selected_date'].year).filter(date__month=request.session['selected_date'].month).filter(category=cat)
     context = {'transaction_list': tx}
     return render(request, 'record/tx_list.html', context=context)
 
