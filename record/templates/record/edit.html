@@ -18,4 +18,13 @@
       <button type="submit" class="btn btn-outline-danger">Delete - THIS CANNOT BE UNDONE</button>
     </form>
   </div>
+
+  <script>
+    $(function () {
+      $("#id_date").datepicker({
+        format:'YYYY-MM-DD',
+      });
+    });
+  </script>
+
 {% endblock %}
