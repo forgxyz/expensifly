@@ -9,7 +9,7 @@
     <h4>top categories</h4>
     <ol>
       {% for category, amount in request.session.top_cats.amount.items %}
-        <li>{{ category }}: ${{ amount|floatformat:0|intcomma }}</li>
+        <li><a href="{% url 'record:category' category %}">{{ category }}</a>: ${{ amount|floatformat:2|intcomma }}</li>
       {% endfor %}
     </ol>
 

@@ -8,13 +8,16 @@ from django.urls import reverse
 from datetime import date
 from django_pandas.io import read_frame
 
-from .models import Expense, ExpenseForm
+from .models import Category, Expense, ExpenseForm
 
 
 # load current month tx for selected category
 @login_required
 def category(request, category):
-    return None
+    cat = Category.objects.get(category=category)
+    tx = Expense.objects.filter(date__year=request.session['selected_date'].year).filter(date__month=request.session['selected_date'].month).filter(category=cat)
+    context = {'transaction_list': tx}
+    return render(request, 'record/tx_list.html', context=context)
 
 
 @login_required
@@ -115,15 +118,16 @@ def save(request):
 # change selected_date
 @login_required
 def set_month(request, year, month):
-    # only load for this user id
+    # set month
     request.session['selected_date'] = date(year, month, 1)
 
+    # load tx for this user id
     transactions_month = Expense.objects.filter(user=request.user).filter(date__year=request.session['selected_date'].year).filter(date__month=request.session['selected_date'].month)
-    request.session['transaction_list'] = transactions_month
     request.session['total_month'] = transactions_month.aggregate(Sum('amount'))['amount__sum']
 
     request.session['total_year'] = Expense.objects.filter(user=request.user).filter(date__year=request.session['selected_date'].year).aggregate(Sum('amount'))['amount__sum']
 
+    # calc top categories
     tx = read_frame(transactions_month, fieldnames=['category', 'amount'])
     request.session['top_cats'] = tx.groupby('category').sum().sort_values('amount', ascending=False).to_dict()
 
@@ -136,7 +140,8 @@ def set_month(request, year, month):
 # load list of transactions
 @login_required
 def transactions(request):
-    context = {}
+    tx = Expense.objects.filter(user=request.user).filter(date__year=request.session['selected_date'].year).filter(date__month=request.session['selected_date'].month)
+    context = {'transaction_list': tx}
     return render(request, 'record/tx_list.html', context=context)
 
 
