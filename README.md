@@ -10,8 +10,8 @@
 ### general
 - [ ] split out update month and refresh transactions
 - [caching](https://docs.djangoproject.com/en/3.0/topics/cache/) instead of session storage? pros/cons/best practice?
+  - yes bc the way i have it set up currently does not refresh well
 
-### auth
 
 ### record
 - [ ] option for money in
@@ -21,23 +21,22 @@
   - datepicker
   - admin panel uses one
 
+
 ### view
 - [ ] filter month by category / dynamic table
 - [ ] portal with more in depth options
   - comparison
     - month to month
     - YTD y-o-y
+- [ ] categories: list alpha and show to 2 decimals
 
 
 ### deployment
-- [ ] get on heroku for testing during development by end of sept
-- [ ] mobile compatability
 - [ ] test db
 - [ ] https
 - [ ] security checklist - what do i need to know?
 
 
-### models
 
 
 ## other
@@ -91,3 +90,5 @@
 - [x] add permission requirement for edit and delete
 - make sure another user cannot plug in a number after edit or delete
 - [x] finish delete()
+- [x] get on heroku for testing during development by end of sept
+- [x] mobile compatability
