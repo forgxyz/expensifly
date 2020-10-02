@@ -2,7 +2,7 @@
 
 # expensifly
 
-**try it out:**  
+[**try it out:**](https://expensifly.herokuapp.com)  
 *un: testuser*  
 *pw: banana4g*  
 
