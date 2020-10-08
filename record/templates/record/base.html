@@ -1,75 +1,23 @@
 <!DOCTYPE html>
-{% load static %}
 {% load humanize %}
 <html>
   <head>
     <title>expensifly</title>
-    <link rel="stylesheet" href="{% static 'record/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'record/main.css' %}">
-    <link rel="shortcut icon" type="image/png" href="{% static 'record/favicon.ico' %}"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% include "record/meta.html" %}
   </head>
 
   <body>
-    <!-- Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-
-
-    <!-- Fengyuan Chen's Datepicker -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/1.0.10/datepicker.min.css" crossorigin="anonymous" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
-
-
-    <!-- FusionCharts JS -->
-    <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
-    <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
-
-    <!-- bootstrap navbar -->
-    <nav class="navbar sticky-top navbar-expand-xl navbar-dark bg-primary">
-      <a class="navbar-brand" href="{% url 'record:index' %}">{% if request.user.is_authenticated %}{{ request.user }}{% else %}expensifly{% endif %}</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarNav">
-        {% if request.user.is_authenticated %}
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a href="{% url 'record:record' %}" class="nav-link">record a new expense</a>
-            </li>
-            <li class ="nav-item">
-              <a href="{% url 'record:transactions' %}" class="nav-link">view transactions</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                change month
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                {% for month in request.session.months %}
-                  <a href="{% url 'record:change_month' month.year month.month %}" class="dropdown-item">{{ month|date:"F Y" }}</a><br>
-                {% endfor %}
-              </div>
-              <li class="nav-item">
-                  <a href="{% url 'record:logout' %}" class="nav-link">Log out</a>
-              </li>
-          </ul>
-        {% endif %}
-
-      </div>
-    </nav>
+    {% include "record/nav.html" %}
 
     <!-- alert, if included in view -->
     <div class="container" style="padding-top: 15px;">
       {% if message %}
         <div class="alert alert-dismissable alert-{{ message_type }}">
           <button type="button" class="close" data-dismiss="alert">&times;</button>
-          <p>{{ message }}</p>
+          <p>{{ message|safe }}</p>
         </div>
       {% endif %}
     </div>
-
 
     <!-- body content -->
     {% block body %}

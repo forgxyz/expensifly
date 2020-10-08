@@ -10,13 +10,14 @@
 ### general
 - [ ] split out update month and refresh transactions
 - [caching](https://docs.djangoproject.com/en/3.0/topics/cache/) instead of session storage? pros/cons/best practice?
-  - yes bc the way i have it set up currently does not refresh well
+  - **yes bc the way i have it set up currently does not refresh well**
 
 
 ### record
 - [ ] option for money in
   - record top line to have a view of cash flow
-
+- Always return an HttpResponseRedirect after successfully dealing with POST data. This prevents data from being posted twice if a user hits the Back button.
+- SO, if i shouldn't use render, how can i pass a message on submit?
 
 ### view
 - [ ] filter month by category / dynamic table

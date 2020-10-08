@@ -26,5 +26,5 @@ def category_barchart(request):
         data['value'] = int(amount)
         dataSource['data'].append(data)
 
-    column2D = FusionCharts("bar2d", "categoryBarChart", "85%", "550", "categoryBarChart-container", "json", dataSource)
+    column2D = FusionCharts("bar2d", "categoryBarChart", "100%", "550", "categoryBarChart-container", "json", dataSource)
     return column2D

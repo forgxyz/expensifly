@@ -107,7 +107,8 @@ def save(request):
 
             # change to new month, if different from current. also adds new month to navbar
             set_month(request, sel_date.year, sel_date.month)
-        return HttpResponseRedirect(reverse('record:index'))
+        context = {'message': f"Successfully added {e} ... <a href='/record'>add another?</a>", 'message_type': 'success'}
+        return render(request, 'record/index.html', context=context)
 
     # if not POST, redirect to form load
     return HttpResponseRedirect(reverse('record:record'))
