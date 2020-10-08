@@ -21,6 +21,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/1.0.10/datepicker.min.css" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
 
+
+    <!-- FusionCharts JS -->
+    <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+    <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
+
+    <!-- bootstrap navbar -->
     <nav class="navbar sticky-top navbar-expand-xl navbar-dark bg-primary">
       <a class="navbar-brand" href="{% url 'record:index' %}">{% if request.user.is_authenticated %}{{ request.user }}{% else %}expensifly{% endif %}</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +59,8 @@
 
       </div>
     </nav>
+
+    <!-- alert, if included in view -->
     <div class="container" style="padding-top: 15px;">
       {% if message %}
         <div class="alert alert-dismissable alert-{{ message_type }}">
@@ -62,6 +70,8 @@
       {% endif %}
     </div>
 
+
+    <!-- body content -->
     {% block body %}
     {% endblock %}
 
