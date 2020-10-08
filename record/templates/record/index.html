@@ -1,5 +1,8 @@
 {% extends "record/base.html" %}
+
 {% load humanize %}
+
+
 {% block body %}
   <div class="container">
     <h1>{{request.session.selected_date|date:"Y" }} total: ${{ request.session.total_year|floatformat:0|intcomma }}</h1>

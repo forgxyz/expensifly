@@ -39,7 +39,7 @@ class Expense(models.Model):
         ordering = ['date']
 
     def __str__(self):
-        return f"${self.amount} on {self.date}, {self.category} - {self.comment}"
+        return f"{self.category} for ${self.amount} on {self.date}"
 
 
 class ExpenseForm(forms.ModelForm):
