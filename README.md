@@ -16,10 +16,6 @@
 ### record
 - [ ] option for money in
   - record top line to have a view of cash flow
-- [ ] date accepts str input
-  - popup calendar for one click input?
-  - datepicker
-  - admin panel uses one
 
 
 ### view
@@ -92,3 +88,7 @@
 - [x] finish delete()
 - [x] get on heroku for testing during development by end of sept
 - [x] mobile compatability
+- [x] date accepts str input
+  - popup calendar for one click input?
+  - datepicker
+  - admin panel uses one

@@ -9,7 +9,7 @@ from datetime import date
 from django_pandas.io import read_frame
 
 from .models import Category, Expense, ExpenseForm
-
+from .helpers import *
 
 # load current month tx for selected category
 @login_required
@@ -74,7 +74,9 @@ def index(request):
     if not request.session.get('initialize', False):
         request.session['initialize'] = True
         set_month(request, date.today().year, date.today().month)
-    return render(request, 'record/index.html')
+    category2D = category_barchart(request)
+    context = {'chart': category2D.render()}
+    return render(request, 'record/index.html', context=context)
 
 
 # load Expense ModelForm
