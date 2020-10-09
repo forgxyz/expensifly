@@ -113,10 +113,6 @@ def save(request):
     # if not POST, redirect to form load
     return HttpResponseRedirect(reverse('record:record'))
 
-    # Always return an HttpResponseRedirect after successfully dealing
-    # with POST data. This prevents data from being posted twice if a
-    # user hits the Back button.
-
 
 # change selected_date
 @login_required

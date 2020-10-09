@@ -1,15 +1,11 @@
 /* tags */
 
-/* classes  */
+/* .classes  */
 
 .dropdown-menu{
-   max-height:300px;
+   max-height: 300px;
    overflow-y: scroll;
 }
 
 
-/* ids */
-#categoryBarChart-Container {
-  max-width: 100%;
-  width: auto;
-}
+/* #ids */

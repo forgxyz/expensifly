@@ -29,7 +29,6 @@
 
 
 ### deployment
-- [ ] test db
 - [ ] https
 - [ ] security checklist - what do i need to know?
 
@@ -93,3 +92,4 @@
   - popup calendar for one click input?
   - datepicker
   - admin panel uses one
+- [x] test db
