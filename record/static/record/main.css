@@ -1,11 +1,11 @@
 /* tags */
 
-/* classes  */
+/* .classes  */
 
 .dropdown-menu{
-   max-height:300px;
+   max-height: 300px;
    overflow-y: scroll;
 }
 
 
-/* ids */
+/* #ids */
