@@ -1,3 +1,4 @@
+*.DS_STORE
 .env
-ignore/
+*ignore/
 *__pycache__
