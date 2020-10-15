@@ -7,6 +7,8 @@ from django.urls import reverse
 
 from datetime import date
 from django_pandas.io import read_frame
+from djmoney.money import Currency, Money
+from djmoney.contrib.exchange.models import convert_money
 
 from .models import Category, Expense, ExpenseForm
 from .helpers import *
@@ -103,15 +105,25 @@ def save(request):
             comment = form.cleaned_data['comment']
             tag = form.cleaned_data['tag']
 
+            # only save as USD, but note what the original amount was
+            if amount.currency != Currency('USD'):
+                comment = comment + ' *ORIGINAL [' + str(amount) + ']*'
+                amount = convert_money(amount, 'USD')
+
             e = Expense.objects.create(amount=amount, date=sel_date, category=category, method=method, comment=comment, tag=tag, user=request.user)
 
             # change to new month, if different from current. also adds new month to navbar
             set_month(request, sel_date.year, sel_date.month)
-        context = {'message': f"Successfully added {e} ... <a href='/record'>add another?</a>", 'message_type': 'success'}
-        return render(request, 'record/index.html', context=context)
+            message = {'message': f"Successfully added {e}... <a href='/record>add another?</a>'", 'message_type': 'success'}
+            # load the index page
+            return HttpResponseRedirect(reverse('record:index'))
 
+        context = {'message': f'Error. Form did not properly validate. Errors: {form.errors}', 'message_type': 'danger'}
+        return render(request, 'record/index.html', context=context)
     # if not POST, redirect to form load
     return HttpResponseRedirect(reverse('record:record'))
+
+
 
 
 # change selected_date

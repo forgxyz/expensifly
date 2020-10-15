@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.admindocs',
     'django.contrib.humanize',
+    'djmoney',
+    'djmoney.contrib.exchange',
 ]
 
 MIDDLEWARE = [
@@ -135,6 +137,16 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Set serializer
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
+
+# required for @login_required
 LOGIN_URL = '/login'
+
+
+# django-money settings
+AUTO_CONVERT_MONEY = True
+CURRENCIES = ('CAD', 'CHF', 'EUR', 'GBP', 'USD')
+DEFAULT_CURRENCY = 'USD'
+EXCHANGE_BACKEND = 'djmoney.contrib.exchange.backends.FixerBackend'
+FIXER_ACCESS_KEY = os.getenv("FIXER_ACCESS_KEY")
 
 django_heroku.settings(locals())

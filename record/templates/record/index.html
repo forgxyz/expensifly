@@ -8,10 +8,10 @@
     <h1>{{request.session.selected_date|date:"Y" }} total: ${{ request.session.total_year|floatformat:0|intcomma }}</h1>
 
     <h2>your {{ request.session.selected_date|date:"F" }}</h2>
-    <h4>total: ${{ request.session.total_month|floatformat:0|intcomma }}</h4>
+    <h4>total: {{ request.session.total_month }}</h4>
     <ol>
       {% for category, amount in request.session.top_cats.amount.items %}
-        <li><a href="{% url 'record:category' category %}">{{ category }}</a>: ${{ amount|floatformat:2|intcomma }}</li>
+        <li><a href="{% url 'record:category' category %}">{{ category }}</a>: {{ amount }}</li>
       {% endfor %}
     </ol>
 
