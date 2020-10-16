@@ -5,11 +5,14 @@
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="collapse navbar-collapse" id="navbarNav">
-    {% if request.user.is_authenticated %}
+  {% if request.user.is_authenticated %}
+    <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a href="{% url 'record:record' %}" class="nav-link">record a new expense</a>
+          <a href="{% url 'record:income' %}" class="nav-link">record income</a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'record:expense' %}" class="nav-link">record a new expense</a>
         </li>
         <li class ="nav-item">
           <a href="{% url 'record:transactions' %}" class="nav-link">view transactions</a>

@@ -5,42 +5,20 @@
 [**try it out:**](https://expensifly.herokuapp.com)  
 *un: testuser*  
 *pw: banana4g*  
+*give it a few seconds to load. using heroku's hobby level*  
 
 ## todo
-### general
-- [ ] split out update month and refresh transactions
-- [caching](https://docs.djangoproject.com/en/3.0/topics/cache/) instead of session storage? pros/cons/best practice?
-  - **yes bc the way i have it set up currently does not refresh well**
-
-
-### record
-- [ ] option for money in
-  - record top line to have a view of cash flow
-- Always return an HttpResponseRedirect after successfully dealing with POST data. This prevents data from being posted twice if a user hits the Back button.
-- SO, if i shouldn't use render, how can i pass a message on submit?
-
-### view
-- [ ] filter month by category / dynamic table
-- [ ] portal with more in depth options
-  - comparison
-    - month to month
-    - YTD y-o-y
-- [ ] categories: list alpha and show to 2 decimals
 
 
 ### deployment
-- [ ] https
+- [ ] https?
 - [ ] security checklist - what do i need to know?
-
-
 
 
 ## other
 ### notes
 - #181a1b looked good as a dark bg for body
-
-
-### django questions / to look up
+- Always return an HttpResponseRedirect after successfully dealing with POST data. This prevents data from being posted twice if a user hits the Back button.
 
 
 ## done
@@ -93,3 +71,8 @@
   - datepicker
   - admin panel uses one
 - [x] test db
+- [x] split out update month and refresh transactions
+- [caching](https://docs.djangoproject.com/en/3.0/topics/cache/) instead of session storage? pros/cons/best practice?
+- **yes bc the way i have it set up currently does not refresh well**
+- [x] option for money in
+-   record top line to have a view of cash flow

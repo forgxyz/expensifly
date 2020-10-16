@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import Sum
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render
 from django.urls import reverse
 
 from datetime import date
@@ -10,8 +10,10 @@ from django_pandas.io import read_frame
 from djmoney.money import Currency, Money
 from djmoney.contrib.exchange.models import convert_money
 
-from .models import Category, Expense, ExpenseForm
+from .models import Category, Expense, Income
+from .forms import ExpenseForm, IncomeForm
 from .helpers import *
+
 
 # load current month tx for selected category
 @login_required
@@ -35,8 +37,7 @@ def delete(request, tx_id=None):
     if request.method == 'POST':
         if request.user == Expense.objects.get(pk=tx_id).user:
             Expense.objects.get(pk=tx_id).delete()
-            set_month(request, request.session['selected_date'].year, request.session['selected_date'].month)
-            return HttpResponseRedirect(reverse('record:transactions'))
+            return HttpResponseRedirect(reverse('record:index'))
 
         context = {'form': form, 'tx_id': tx_id, 'message': 'Error, user id mismatch.', 'message_type': 'danger'}
         return render(request, 'record/edit.html', context=context)
@@ -60,14 +61,83 @@ def edit(request, tx_id=None):
         form = ExpenseForm(request.POST, instance=e)
         if form.is_valid():
             form.save()
-            set_month(request, form.cleaned_data['date'].year, form.cleaned_data['date'].month)
             return HttpResponseRedirect(reverse('record:transactions'))
         context = {'form': form, 'tx_id': tx_id, 'message': 'Error, invalid input.', 'message_type': 'danger'}
         return render(request, 'record/edit.html', context=context)
 
     form = ExpenseForm(instance=e)
-    context = {'form': form, 'tx_id': tx_id}
-    return render(request, 'record/edit.html', context=context)
+    context = {'form': form, 'form_type': 'edit', 'tx_id': tx_id}
+    return render(request, 'record/record.html', context=context)
+
+
+@login_required
+@permission_required('record.add_expense', login_url='record:transactions')
+def expense(request):
+    # save new transaction information to database or load expense form
+    if request.method == 'POST':
+        # expense submission
+        form = ExpenseForm(request.POST)
+        if form.is_valid():
+            # save the input
+            amount = form.cleaned_data['amount']
+            tx_date = form.cleaned_data['date']
+            category = form.cleaned_data['category']
+            method = form.cleaned_data['method']
+            comment = form.cleaned_data['comment']
+            tag = form.cleaned_data['tag']
+            user = request.user
+
+            # only save as USD, but note what the original amount was
+            # also store original amount and flip converted to true
+            if amount.currency != Currency('USD'):
+                fxamount = amount
+                converted = True
+                comment = comment + ' *ORIGINAL [' + str(amount) + ']*'
+                amount = convert_money(amount, 'USD')
+                e = Expense.objects.create(amount=amount, date=tx_date, category=category, method=method, comment=comment, tag=tag, user=user, fxamount=fxamount, converted=converted)
+            else:
+                # otherwise store as submitted
+                e = Expense.objects.create(amount=amount, date=tx_date, category=category, method=method, comment=comment, tag=tag, user=user)
+
+            # change to new month, if different from current. also adds new month to navbar
+            set_month(request, tx_date.year, tx_date.month)
+
+            # load the index page
+            return HttpResponseRedirect(reverse('record:index'))
+
+        context = {'message': f'Error. Form did not properly validate. Errors: {form.errors}', 'message_type': 'danger'}
+        return render(request, 'record/index.html', context=context)
+
+    # if not POST, load form
+    context = {'form': ExpenseForm(), 'form_type': 'expense'}
+    return render(request, 'record/record.html', context=context)
+
+
+@login_required
+@permission_required('record.add_income', login_url='record:index')
+def income(request):
+    if request.method == 'POST':
+        form = IncomeForm(request.POST)
+        if form.is_valid():
+            amount = form.cleaned_data['amount']
+            tx_date = form.cleaned_data['date']
+            source = form.cleaned_data['source']
+            user = request.user
+
+            # only save as USD, but note what the original amount was
+            # also store original amount and flip converted to true
+            if amount.currency != Currency('USD'):
+                fxamount = amount
+                converted = True
+                amount = convert_money(amount, 'USD')
+                i = Income.objects.create(amount=amount, date=tx_date, source=source, user=user, fxamount=fxamount, converted=converted)
+            else:
+                i = Income.objects.create(amount=amount, date=tx_date, source=source, user=user)
+
+            return HttpResponseRedirect(reverse('record:index'))
+
+    context = {'form': IncomeForm(), 'form_type': 'income'}
+    return render(request, 'record/record.html', context=context)
 
 
 # load main overview screen. redirect to login if needed. set to current month
@@ -76,54 +146,12 @@ def index(request):
     if not request.session.get('initialize', False):
         request.session['initialize'] = True
         set_month(request, date.today().year, date.today().month)
+
+    transactions = fetch_transactions(request, request.session['selected_date'].year, request.session['selected_date'].month)
     category2D = category_barchart(request)
-    context = {'chart': category2D.render()}
+
+    context = {'chart': category2D.render(), 'total_month': transactions['total'], 'total_categories': transactions['total_categories'], 'total_year': transactions['total_year']}
     return render(request, 'record/index.html', context=context)
-
-
-# load Expense ModelForm
-@login_required
-def record(request):
-    context = {'form': ExpenseForm()}
-    return render(request, 'record/record.html', context=context)
-
-
-# handle Expense ModelForm submission
-@login_required
-@permission_required('record.add_expense', login_url='record:transactions')
-def save(request):
-    # save new transaction information to database
-    if request.method == 'POST':
-        # expense submission
-        form = ExpenseForm(request.POST)
-        if form.is_valid():
-            # save the input
-            amount = form.cleaned_data['amount']
-            sel_date = form.cleaned_data['date']
-            category = form.cleaned_data['category']
-            method = form.cleaned_data['method']
-            comment = form.cleaned_data['comment']
-            tag = form.cleaned_data['tag']
-
-            # only save as USD, but note what the original amount was
-            if amount.currency != Currency('USD'):
-                comment = comment + ' *ORIGINAL [' + str(amount) + ']*'
-                amount = convert_money(amount, 'USD')
-
-            e = Expense.objects.create(amount=amount, date=sel_date, category=category, method=method, comment=comment, tag=tag, user=request.user)
-
-            # change to new month, if different from current. also adds new month to navbar
-            set_month(request, sel_date.year, sel_date.month)
-            message = {'message': f"Successfully added {e}... <a href='/record>add another?</a>'", 'message_type': 'success'}
-            # load the index page
-            return HttpResponseRedirect(reverse('record:index'))
-
-        context = {'message': f'Error. Form did not properly validate. Errors: {form.errors}', 'message_type': 'danger'}
-        return render(request, 'record/index.html', context=context)
-    # if not POST, redirect to form load
-    return HttpResponseRedirect(reverse('record:record'))
-
-
 
 
 # change selected_date
@@ -132,16 +160,7 @@ def set_month(request, year, month):
     # set month
     request.session['selected_date'] = date(year, month, 1)
 
-    # load tx for this user id
-    transactions_month = Expense.objects.filter(user=request.user).filter(date__year=request.session['selected_date'].year).filter(date__month=request.session['selected_date'].month)
-    request.session['total_month'] = transactions_month.aggregate(Sum('amount'))['amount__sum']
-
-    request.session['total_year'] = Expense.objects.filter(user=request.user).filter(date__year=request.session['selected_date'].year).aggregate(Sum('amount'))['amount__sum']
-
-    # calc top categories
-    tx = read_frame(transactions_month, fieldnames=['category', 'amount'])
-    request.session['top_cats'] = tx.groupby('category').sum().sort_values('amount', ascending=False).to_dict()
-
+    # add month to navbar if new
     if month not in request.session.get('months', []):
         request.session['months'] = Expense.objects.filter(user=request.user).dates('date', 'month').order_by('-datefield')
 
