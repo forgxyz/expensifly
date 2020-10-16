@@ -1,12 +1,12 @@
-from django import forms
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-# Create your models here.
+from djmoney.models.fields import CurrencyField, MoneyField
+from djmoney.models.validators import BaseMoneyValidator
+
 
 class Category(models.Model):
-    # this won't change or have user input... different type?
     category = models.CharField(max_length=50)
 
     class Meta:
@@ -18,39 +18,45 @@ class Category(models.Model):
 
 
 class Method(models.Model):
-    # categorical type?
     method = models.CharField(max_length=50)
 
     def __str__(self):
         return self.method
 
 
+class Source(models.Model):
+    source = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.source
+
+
 class Expense(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
-    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    amount = MoneyField(max_digits=19, decimal_places=2, default_currency='USD')
     date = models.DateField(default=timezone.now)
-    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
-    method = models.ForeignKey(Method, on_delete=models.DO_NOTHING)
-    comment = models.CharField(max_length=100, blank=True)
-    tag = models.CharField(max_length=50, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    method = models.ForeignKey(Method, on_delete=models.PROTECT)
+    comment = models.CharField(max_length=250, blank=True)
+    tag = models.CharField(max_length=100, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    fxamount = MoneyField(max_digits=19, decimal_places=2, null=True, default=None)
+    converted = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['date']
 
     def __str__(self):
-        return f"{self.category} for ${self.amount} on {self.date}"
+        return f"{self.category} for {self.amount} on {self.date}"
 
 
-class ExpenseForm(forms.ModelForm):
-    class Meta:
-        model = Expense
-        fields = ['amount', 'date', 'category', 'method', 'comment', 'tag']
-        widgets = {
-            'amount': forms.NumberInput(attrs={'class': 'form-control'}),
-            'date': forms.DateInput(attrs={'class': 'form-control'}),
-            'category': forms.Select(attrs={'class': 'form-control'}),
-            'method': forms.Select(attrs={'class': 'form-control'}),
-            'comment': forms.TextInput(attrs={'class': 'form-control'}),
-            'tag': forms.TextInput(attrs={'class': 'form-control'})
-        }
+class Income(models.Model):
+    amount = MoneyField(max_digits=19, decimal_places=2, default_currency='USD')
+    date = models.DateField(default=timezone.now)
+    source = models.ForeignKey(Source, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    fxamount = MoneyField(max_digits=19, decimal_places=2, null=True, default=None)
+    converted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.amount} on {self.date}"

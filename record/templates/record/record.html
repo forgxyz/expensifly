@@ -4,13 +4,36 @@
 {% block body %}
 
   <div class="container">
-    <h1>record an expense</h1>
+    <h1>{{ form_type }}</h1>
 
-    <form action="{% url 'record:save' %}" method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit" class="btn btn-outline-success">Submit</button>
-    </form>
+    {% if form_type == 'edit' %}
+      <form action="{% url 'record:edit' tx_id %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          {{ form.as_p }}
+        </div>
+        <hr>
+        <form action="{% url 'record:delete' tx_id %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-danger">Delete - THIS CANNOT BE UNDONE</button>
+      </form>
+    {% elif form_type == 'expense' %}
+      <form action="{% url 'record:expense' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-outline-success">Submit</button>
+      </form>
+    {% elif form_type == 'income' %}
+      <form action="{% url 'record:income' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-outline-success">Submit</button>
+      </form>
+    {% endif %}
   </div>
 
   <script>
