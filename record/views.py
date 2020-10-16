@@ -60,13 +60,30 @@ def edit(request, tx_id=None):
     if request.method == 'POST':
         form = ExpenseForm(request.POST, instance=e)
         if form.is_valid():
-            form.save()
+            e.amount = form.cleaned_data['amount']
+            e.category = form.cleaned_data['category']
+            e.comment = form.cleaned_data['comment']
+            e.date = form.cleaned_data['date']
+            e.method = form.cleaned_data['method']
+            e.tag = form.cleaned_data['tag']
+
+            if form['amount'].value()[1] != Currency('USD'):
+                e.amount = convert_money(form.cleaned_data['amount'], 'USD')
+                e.converted = True
+                e.fxamount = form.cleaned_data['amount']
+                e.comment = form.cleaned_data['comment'] + f' *EDITED [{e.fxamount}]*'
+
+            e.save()
+
             return HttpResponseRedirect(reverse('record:transactions'))
+
         context = {'form': form, 'tx_id': tx_id, 'message': 'Error, invalid input.', 'message_type': 'danger'}
+
         return render(request, 'record/edit.html', context=context)
 
     form = ExpenseForm(instance=e)
     context = {'form': form, 'form_type': 'edit', 'tx_id': tx_id}
+
     return render(request, 'record/record.html', context=context)
 
 

@@ -12,6 +12,8 @@
         <div class="form-group">
           {{ form.as_p }}
         </div>
+        <button type="submit" class="btn btn-outline-success">Submit</button>
+      </form>
         <hr>
         <form action="{% url 'record:delete' tx_id %}" method="post">
           {% csrf_token %}
