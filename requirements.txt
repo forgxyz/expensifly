@@ -1,5 +1,6 @@
 django
 dj-database-url
+django-money
 django-heroku
 django-pandas
 gunicorn
