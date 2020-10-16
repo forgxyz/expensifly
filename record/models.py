@@ -30,6 +30,8 @@ class Source(models.Model):
     def __str__(self):
         return self.source
 
+    class Meta:
+        ordering = ['source']
 
 class Expense(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
