@@ -1,3 +1,4 @@
+certifi
 django
 dj-database-url
 django-heroku
