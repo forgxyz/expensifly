@@ -3,7 +3,7 @@
 {% block body %}
   <div class="container">
     <h1>{{ request.session.selected_date|date:"F Y" }} transactions</h1>
-    <h2>Month Total: ${{ request.session.total_month|floatformat:2|intcomma }}</h2>
+    <h2>{{ transactions.heading }} Total: ${{ transactions.total|floatformat:2|intcomma }}</h2>
 
     <div class="table-responsive-sm">
       <table class="table table-hover table-striped">
@@ -15,7 +15,7 @@
           <th scope="col">Comment</th>
           <th scope="col"></th>
         </thead>
-        {% for item in transaction_list %}
+        {% for item in transactions.transactions %}
           <tr>
             <td>{{ item.date }}</td>
             <td>{{ item.amount }}</td>

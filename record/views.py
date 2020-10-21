@@ -16,9 +16,8 @@ from .helpers import *
 # load current month tx for selected category
 @login_required
 def category(request, cat):
-    cat_obj = Category.objects.get(category=cat)
-    tx = Expense.objects.filter(user=request.user).filter(date__year=request.session['selected_date'].year).filter(date__month=request.session['selected_date'].month).filter(category=cat_obj)
-    context = {'transaction_list': tx}
+    tx = fetch_transactions(request, request.session['selected_date'].year, request.session['selected_date'].month, cat)
+    context = {'transactions': tx}
     return render(request, 'record/tx_list.html', context=context)
 
 
@@ -185,8 +184,8 @@ def set_month(request, year, month):
 # load list of transactions
 @login_required
 def transactions(request):
-    tx = Expense.objects.filter(user=request.user).filter(date__year=request.session['selected_date'].year).filter(date__month=request.session['selected_date'].month)
-    context = {'transaction_list': tx}
+    tx = fetch_transactions(request, request.session['selected_date'].year, request.session['selected_date'].month)
+    context = {'transactions': tx}
     return render(request, 'record/tx_list.html', context=context)
 
 

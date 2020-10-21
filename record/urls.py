@@ -15,7 +15,7 @@ urlpatterns = [
     path('transactions/delete', views.transactions, name='delete_no'),
     path('transactions/edit/<int:tx_id>', views.edit, name='edit'),
     path('transactions/delete/<int:tx_id>', views.delete, name='delete'),
-    path('transactions/<str:category>', views.category, name='category'),
+    path('transactions/<str:cat>', views.category, name='category'),
     path('login/', views.ulogin, name='login'),
     path('logout', views.ulogout, name='logout'),
 ]
