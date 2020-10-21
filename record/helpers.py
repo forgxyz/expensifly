@@ -1,12 +1,12 @@
-from collections import OrderedDict
 from django.db.models import Sum
 from django_pandas.io import read_frame
 
 from .models import Expense
 from .fusioncharts import *
 
+
 def category_barchart(request):
-    dataSource = {
+    data_source = {
         "chart": {
             "caption": f"Top Categories For {request.session['selected_date'].year}",
             "theme": "fusion",
@@ -18,13 +18,11 @@ def category_barchart(request):
     transactions = fetch_transactions(request, request.session['selected_date'].year)
 
     for cat, amount in transactions['total_categories']['amount'].items():
-        data = {}
-        data['label'] = cat
-        data['value'] = int(amount)
-        dataSource['data'].append(data)
+        data = {'label': cat, 'value': int(amount)}
+        data_source['data'].append(data)
 
-    column2D = FusionCharts("bar2d", "categoryBarChart", "100%", "550", "categoryBarChart-container", "json", dataSource)
-    return column2D
+    column2d = FusionCharts("bar2d", "categoryBarChart", "100%", "550", "categoryBarChart-container", "json", data_source)
+    return column2d
 
 
 def fetch_transactions(request, year, month=None):

@@ -2,8 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-from djmoney.models.fields import CurrencyField, MoneyField
-from djmoney.models.validators import BaseMoneyValidator
+from djmoney.models.fields import MoneyField
 
 
 class Category(models.Model):
@@ -32,6 +31,7 @@ class Source(models.Model):
 
     class Meta:
         ordering = ['source']
+
 
 class Expense(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)

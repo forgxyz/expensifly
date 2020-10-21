@@ -1,13 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
-from django.db.models import Sum
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
 from datetime import date
-from django_pandas.io import read_frame
-from djmoney.money import Currency, Money
+from djmoney.money import Currency
 from djmoney.contrib.exchange.models import convert_money
 
 from .models import Category, Expense, Income
@@ -17,9 +15,9 @@ from .helpers import *
 
 # load current month tx for selected category
 @login_required
-def category(request, category):
-    cat = Category.objects.get(category=category)
-    tx = Expense.objects.filter(user=request.user).filter(date__year=request.session['selected_date'].year).filter(date__month=request.session['selected_date'].month).filter(category=cat)
+def category(request, cat):
+    cat_obj = Category.objects.get(category=cat)
+    tx = Expense.objects.filter(user=request.user).filter(date__year=request.session['selected_date'].year).filter(date__month=request.session['selected_date'].month).filter(category=cat_obj)
     context = {'transaction_list': tx}
     return render(request, 'record/tx_list.html', context=context)
 
@@ -29,7 +27,7 @@ def category(request, category):
 def delete(request, tx_id=None):
     # if no tx_id, tx_id does not exist or user mismatch then do not process request
     try:
-        if tx_id == None or request.user != Expense.objects.get(pk=tx_id).user:
+        if tx_id is None or request.user != Expense.objects.get(pk=tx_id).user:
             return HttpResponseRedirect(reverse('record:index'))
     except:
             return HttpResponseRedirect(reverse('record:index'))
@@ -39,8 +37,8 @@ def delete(request, tx_id=None):
             Expense.objects.get(pk=tx_id).delete()
             return HttpResponseRedirect(reverse('record:index'))
 
-        context = {'form': form, 'tx_id': tx_id, 'message': 'Error, user id mismatch.', 'message_type': 'danger'}
-        return render(request, 'record/edit.html', context=context)
+        context = {'tx_id': tx_id, 'message': 'Error, user id mismatch.', 'message_type': 'danger'}
+        return render(request, 'record/index.html', context=context)
 
     return HttpResponseRedirect(reverse('record:index'))
 
@@ -50,7 +48,7 @@ def delete(request, tx_id=None):
 def edit(request, tx_id=None):
     # if no tx_id, tx_id does not exist or user mismatch then do not process request
     try:
-        if tx_id == None or request.user != Expense.objects.get(pk=tx_id).user:
+        if tx_id is None or request.user != Expense.objects.get(pk=tx_id).user:
             return HttpResponseRedirect(reverse('record:index'))
     except:
             return HttpResponseRedirect(reverse('record:index'))
@@ -98,7 +96,7 @@ def expense(request):
             # save the input
             amount = form.cleaned_data['amount']
             tx_date = form.cleaned_data['date']
-            category = form.cleaned_data['category']
+            cat = form.cleaned_data['category']
             method = form.cleaned_data['method']
             comment = form.cleaned_data['comment']
             tag = form.cleaned_data['tag']
@@ -111,10 +109,10 @@ def expense(request):
                 converted = True
                 comment = comment + ' *ORIGINAL [' + str(amount) + ']*'
                 amount = convert_money(amount, 'USD')
-                e = Expense.objects.create(amount=amount, date=tx_date, category=category, method=method, comment=comment, tag=tag, user=user, fxamount=fxamount, converted=converted)
+                Expense.objects.create(amount=amount, date=tx_date, category=cat, method=method, comment=comment, tag=tag, user=user, fxamount=fxamount, converted=converted)
             else:
                 # otherwise store as submitted
-                e = Expense.objects.create(amount=amount, date=tx_date, category=category, method=method, comment=comment, tag=tag, user=user)
+                Expense.objects.create(amount=amount, date=tx_date, category=cat, method=method, comment=comment, tag=tag, user=user)
 
             # change to new month, if different from current. also adds new month to navbar
             set_month(request, tx_date.year, tx_date.month)
@@ -147,9 +145,9 @@ def income(request):
                 fxamount = amount
                 converted = True
                 amount = convert_money(amount, 'USD')
-                i = Income.objects.create(amount=amount, date=tx_date, source=source, user=user, fxamount=fxamount, converted=converted)
+                Income.objects.create(amount=amount, date=tx_date, source=source, user=user, fxamount=fxamount, converted=converted)
             else:
-                i = Income.objects.create(amount=amount, date=tx_date, source=source, user=user)
+                Income.objects.create(amount=amount, date=tx_date, source=source, user=user)
 
             return HttpResponseRedirect(reverse('record:index'))
 
@@ -164,10 +162,10 @@ def index(request):
         request.session['initialize'] = True
         set_month(request, date.today().year, date.today().month)
 
-    transactions = fetch_transactions(request, request.session['selected_date'].year, request.session['selected_date'].month)
-    category2D = category_barchart(request)
+    tx = fetch_transactions(request, request.session['selected_date'].year, request.session['selected_date'].month)
+    category2d = category_barchart(request)
 
-    context = {'chart': category2D.render(), 'total_month': transactions['total'], 'total_categories': transactions['total_categories'], 'total_year': transactions['total_year']}
+    context = {'chart': category2d.render(), 'total_month': tx['total'], 'total_categories': tx['total_categories'], 'total_year': tx['total_year']}
     return render(request, 'record/index.html', context=context)
 
 
