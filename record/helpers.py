@@ -5,10 +5,9 @@ from .models import Category, Expense, Income
 from .fusioncharts import *
 
 
-def category_barchart(request):
+def category_chart(request):
     data_source = {
         "chart": {
-            "caption": f"Top Categories For {request.session['selected_date'].year}",
             "theme": "fusion",
         },
         "data": []
@@ -21,8 +20,8 @@ def category_barchart(request):
         data = {'label': cat, 'value': int(amount)}
         data_source['data'].append(data)
 
-    bar2d = FusionCharts("bar2d", "categoryBarChart", "90%", "550", "categoryBarChart-container", "json", data_source)
-    return bar2d
+    chart = FusionCharts("doughnut2d", "categoryChart", "95%", "350", "categoryChart-container", "json", data_source)
+    return chart
 
 
 def fetch_income(request, year, month=None):
@@ -93,7 +92,6 @@ def weekly_expense(request, year, month=None):
 
     data_source = {
     "chart": {
-        "caption": "Average by Weekday",
         "theme": "fusion",
             },
         "data": []
@@ -103,6 +101,6 @@ def weekly_expense(request, year, month=None):
         data = {'label': day, 'value': int(amount)}
         data_source['data'].append(data)
 
-    column2d = FusionCharts("column2d", "weekdayBarChart", "90%", "300", "weekdayBarChart-container", "json", data_source)
+    chart = FusionCharts("column2d", "weekdayBarChart", "85%", "400", "weekdayBarChart-container", "json", data_source)
 
-    return column2d
+    return chart
