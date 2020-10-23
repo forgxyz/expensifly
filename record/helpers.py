@@ -8,6 +8,10 @@ from .fusioncharts import *
 def category_chart(request):
     data_source = {
         "chart": {
+            "centerlabel": "$label: $value",
+            "decimals": 0,
+            "numberPrefix": "$",
+            "plottooltext": "$value",
             "theme": "fusion",
         },
         "data": []
@@ -20,7 +24,7 @@ def category_chart(request):
         data = {'label': cat, 'value': int(amount)}
         data_source['data'].append(data)
 
-    chart = FusionCharts("doughnut2d", "categoryChart", "95%", "350", "categoryChart-container", "json", data_source)
+    chart = FusionCharts("doughnut2d", "categoryChart", "95%", "600", "categoryChart-container", "json", data_source)
     return chart
 
 
