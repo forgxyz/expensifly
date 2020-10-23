@@ -5,19 +5,27 @@
 
 {% block body %}
   <div class="container">
-    <h1>{{request.session.selected_date|date:"Y" }} total: ${{ total_year|floatformat:0|intcomma }}</h1>
+    <h1>{{request.session.selected_date|date:"Y" }} total: <span class="expense">${{ expense_year|floatformat:0|intcomma }}</span></h1>
 
-    <h2>your {{ request.session.selected_date|date:"F" }}</h2>
-    <h4>total: {{ total_month|intcomma }}</h4>
-    <ol>
-      {% for category, amount in total_categories.amount.items %}
+    <h2>{{ request.session.selected_date|date:"F" }}</h2>
+    <ul style="list-style-type: none;">
+      <li><h5><span class="expense">out: {{ expense_total_period|intcomma }}</span> | <span class="income">in: {{ income_total_period|intcomma }}</span></h5></li>
+      <li><h5>net: {{ net_period|intcomma }}</h5></li>
+    </ul>
+    <h3>where is money going</h3>
+    <ol style="list-style-type: none;">
+      {% for category, amount in expense_categories.amount.items %}
         <li><a href="{% url 'record:category' category %}">{{ category }}</a>: {{ amount|intcomma }}</li>
       {% endfor %}
     </ol>
 
-    <h4>snapshot</h4>
+    <h3>snapshot</h3>
 
-    <div id="categoryBarChart-container">{{ chart|safe }}</div>
+    <h4>when</h4>
+    <div id="weekdayBarChart-container">{{ weekly_avg_chart|safe }}</div>
+    <br>
+    <h4>ytd</h4>
+    <div id="categoryBarChart-container">{{ ytd_cat_chart|safe }}</div>
     <br>
   </div>
 {% endblock %}

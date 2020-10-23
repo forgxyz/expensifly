@@ -7,5 +7,12 @@
    overflow-y: scroll;
 }
 
+.income {
+  color: green;
+}
+
+.expense {
+  color: red;
+}
 
 /* #ids */

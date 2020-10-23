@@ -3,7 +3,7 @@
 {% block body %}
   <div class="container">
     <h1>{{ request.session.selected_date|date:"F Y" }} transactions</h1>
-    <h2>{{ transactions.heading }} Total: ${{ transactions.total|floatformat:2|intcomma }}</h2>
+    <h2>{{ transactions.heading }} Total: ${{ transactions.expense_total_period|floatformat:2|intcomma }}</h2>
 
     <div class="table-responsive-sm">
       <table class="table table-hover table-striped">

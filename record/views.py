@@ -163,8 +163,26 @@ def index(request):
 
     tx = fetch_transactions(request, request.session['selected_date'].year, request.session['selected_date'].month)
     category2d = category_barchart(request)
+    weekday2d = weekly_expense(request, request.session['selected_date'].year)
 
-    context = {'chart': category2d.render(), 'total_month': tx['total'], 'total_categories': tx['total_categories'], 'total_year': tx['total_year']}
+    incomes = fetch_income(request, request.session['selected_date'].year, request.session['selected_date'].month)
+
+    # set context variable
+    context = tx
+    context['ytd_cat_chart'] = category2d.render()
+    context['weekly_avg_chart'] = weekday2d.render()
+    context.update(incomes)
+
+    # these would be None with no record, rather than undefined, so cannot use .get(x, default=y)
+    if not context.get('income_total_period'):
+        context['income_total_period'] = 0
+
+    if not context.get('expense_total_period'):
+        context['expense_total_period'] = 0
+
+    context['net_period'] = context['income_total_period'] - context['expense_total_period']
+
+
     return render(request, 'record/index.html', context=context)
 
 
