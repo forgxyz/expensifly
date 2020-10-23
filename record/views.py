@@ -162,15 +162,15 @@ def index(request):
         set_month(request, date.today().year, date.today().month)
 
     tx = fetch_transactions(request, request.session['selected_date'].year, request.session['selected_date'].month)
-    category2d = category_barchart(request)
-    weekday2d = weekly_expense(request, request.session['selected_date'].year)
+    cat_chart = category_chart(request)
+    weekday_chart = weekly_expense(request, request.session['selected_date'].year)
 
     incomes = fetch_income(request, request.session['selected_date'].year, request.session['selected_date'].month)
 
     # set context variable
     context = tx
-    context['ytd_cat_chart'] = category2d.render()
-    context['weekly_avg_chart'] = weekday2d.render()
+    context['ytd_cat_chart'] = cat_chart.render()
+    context['weekly_avg_chart'] = weekday_chart.render()
     context.update(incomes)
 
     # these would be None with no record, rather than undefined, so cannot use .get(x, default=y)
