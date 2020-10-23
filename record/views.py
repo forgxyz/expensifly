@@ -64,7 +64,7 @@ def edit(request, tx_id=None):
             e.method = form.cleaned_data['method']
             e.tag = form.cleaned_data['tag']
 
-            if form['amount'].value()[1] != Currency('USD'):
+            if form['amount'].value()[1] != 'USD':
                 e.amount = convert_money(form.cleaned_data['amount'], 'USD')
                 e.converted = True
                 e.fxamount = form.cleaned_data['amount']

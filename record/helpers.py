@@ -74,7 +74,12 @@ def weekly_expense(request, year, month=None):
     # clean
     df['date'] = df['date'].astype('datetime64')
     df['amount'] = df['amount'].astype('float')
-    df['weekday'] = df['date'].dt.day_name()
+
+    # flatten expenses down into day
+    df = df.groupby('date').sum()
+
+    # add weekday column
+    df['weekday'] = df.index.day_name()
 
     weekday_avg = df.groupby('weekday').mean().to_dict()
 
