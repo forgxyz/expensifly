@@ -11,7 +11,9 @@ def category_chart(request):
             "centerlabel": "$label: $value",
             "decimals": 0,
             "numberPrefix": "$",
-            "plottooltext": "$value",
+            "plottooltext": "$percentvalue",
+            "showLabels": 0,
+            "showValues": 0,
             "theme": "fusion",
         },
         "data": []
