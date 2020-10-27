@@ -162,16 +162,16 @@ def index(request):
         set_month(request, date.today().year, date.today().month)
 
     tx = fetch_transactions(request, request.session['selected_date'].year, request.session['selected_date'].month)
-    cat_chart = category_chart(request)
-    weekday_chart = weekly_expense(request, request.session['selected_date'].year)
 
     incomes = fetch_income(request, request.session['selected_date'].year, request.session['selected_date'].month)
 
     # set context variable
     context = tx
-    context['ytd_cat_chart'] = cat_chart.render()
-    context['weekly_avg_chart'] = weekday_chart.render()
     context.update(incomes)
+
+    # add chart
+    cumsum = current_month_area(request)
+    context['cumsum_chart'] = cumsum.render()
 
     # these would be None with no record, rather than undefined, so cannot use .get(x, default=y)
     if not context.get('income_total_period'):
@@ -182,8 +182,30 @@ def index(request):
 
     context['net_period'] = context['income_total_period'] - context['expense_total_period']
 
+    if not context.get('income_year'):
+        context['income_year'] = 0
+
+    if not context.get('expense_year'):
+        context['expense_year'] = 0
+
+    context['net_year'] = context['income_year'] - context['expense_year']
+
 
     return render(request, 'record/index.html', context=context)
+
+
+@login_required
+def overview_portal(request):
+
+    cat_chart = category_chart(request)
+    weekday_chart = weekly_expense(request, request.session['selected_date'].year)
+
+    context = {
+        'ytd_cat_chart': cat_chart.render(),
+        'weekly_avg_chart': weekday_chart.render(),
+    }
+
+    return render(request, 'record/portal.html', context=context)
 
 
 # change selected_date

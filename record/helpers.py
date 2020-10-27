@@ -30,6 +30,36 @@ def category_chart(request):
     return chart
 
 
+def current_month_area(request):
+    tx = fetch_transactions(request, request.session['selected_date'].year, request.session['selected_date'].month)
+
+    df = read_frame(tx['transactions'], fieldnames=['date', 'amount'])
+
+    # clean
+    df['date'] = df['date'].astype('datetime64')
+    df['amount'] = df['amount'].astype('float')
+
+    # flatten expenses down into day
+    df = df.groupby('date').sum()
+
+    cumsum = df.cumsum().to_dict()['amount']
+
+    data_source = {
+    "chart": {
+        "theme": "fusion",
+            },
+        "data": []
+    }
+
+    for date, amount in cumsum.items():
+        data = {'label': str(date.date()), 'value': amount}
+        data_source['data'].append(data)
+
+    chart = FusionCharts("area2d", "cumsumChart", "85%", "400", "cumsumChart-container", "json", data_source)
+
+    return chart
+
+
 def fetch_income(request, year, month=None):
     income = Income.objects.filter(user=request.user).filter(date__year=year)
     total_year = income.aggregate(Sum('amount'))['amount__sum']
@@ -101,7 +131,7 @@ def weekly_expense(request, year, month=None):
         "theme": "fusion",
             },
         "data": []
-        }
+    }
 
     for day, amount in weekday_ordered.items():
         data = {'label': day, 'value': int(amount)}

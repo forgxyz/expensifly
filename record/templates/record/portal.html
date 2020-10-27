@@ -1,5 +1,12 @@
 {% extends 'record/base.html' %}
 
 {% block body %}
+  <div class="container">
+    <h4>avg by day, {{ request.session.selected_date|date:"Y" }}</h4>
+    <div id="weekdayBarChart-container">{{ weekly_avg_chart|safe }}</div>
+    <br>
+    <h4>total by category, {{ request.session.selected_date|date:"Y" }}</h4>
+    <div id="categoryChart-container">{{ ytd_cat_chart|safe }}</div>
+  </div>
 
 {% endblock %}

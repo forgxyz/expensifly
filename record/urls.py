@@ -18,5 +18,6 @@ urlpatterns = [
     path('transactions/<str:cat>', views.category, name='category'),
     path('login/', views.ulogin, name='login'),
     path('logout', views.ulogout, name='logout'),
+    path('overview', views.overview_portal, name='overview'),
 ]
 # in template: {% url 'record:index' %}

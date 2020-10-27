@@ -7,13 +7,14 @@
   <div class="container">
     <h1>{{ request.session.selected_date|date:"Y" }}</h1>
     <ul style="list-style-type: none;">
-      <li><h5>out: <span class="expense">${{ expense_year|floatformat:0|intcomma }}</span> | in: <span class="income">${{ income_year|floatformat:0|intcomma }}</span></h5></li>
+      <li><h5>out: <span class="expense">${{ expense_year|floatformat:0|intcomma }}</span> {% if income_year > 0 %}| in: <span class="income">${{ income_year|floatformat:0|intcomma }}</span></h5></li>
+      <li><h5>net: ${{ net_year|floatformat:0|intcomma }}</li>{% endif %}
     </ul>
 
     <h2>{{ request.session.selected_date|date:"F" }}</h2>
     <ul style="list-style-type: none;">
-      <li><h5>out: <span class="expense">{{ expense_total_period|intcomma }}</span> | in: <span class="income">{{ income_total_period|intcomma }}</span></h5></li>
-      <li><h5>net: {{ net_period|intcomma }}</h5></li>
+      <li><h5>out: <span class="expense">{{ expense_total_period|intcomma }}</span>{% if income_total_period > 0 %} | in: <span class="income">{{ income_total_period|intcomma }}</span></h5></li>
+      <li><h5>net: {{ net_period|intcomma }}</h5></li>{% endif %}
     </ul>
     <h3>where is it going</h3>
     <ol style="list-style-type: none;">
@@ -23,12 +24,7 @@
     </ol>
 
     <h3>snapshot</h3>
+    <div id="cumsumChart-container">{{ cumsum_chart|safe }}</div>
 
-    <h4>avg by day, {{ request.session.selected_date|date:"Y" }}</h4>
-    <div id="weekdayBarChart-container">{{ weekly_avg_chart|safe }}</div>
-    <br>
-    <h4>total by category, {{ request.session.selected_date|date:"Y" }}</h4>
-    <div id="categoryChart-container">{{ ytd_cat_chart|safe }}</div>
-    <br>
   </div>
 {% endblock %}
