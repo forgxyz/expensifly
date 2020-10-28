@@ -47,6 +47,7 @@ def current_month_area(request):
     data_source = {
     "chart": {
         "theme": "fusion",
+        "plottooltext": "Day $label -- $$value",
         "xaxisname": "Day of Month"
             },
         "data": []
