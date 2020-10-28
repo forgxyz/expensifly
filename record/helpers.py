@@ -47,6 +47,7 @@ def current_month_area(request):
     data_source = {
     "chart": {
         "theme": "fusion",
+        "xaxisname": "Day of Month"
             },
         "data": []
     }
