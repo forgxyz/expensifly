@@ -52,10 +52,10 @@ def current_month_area(request):
     }
 
     for date, amount in cumsum.items():
-        data = {'label': str(date.date()), 'value': amount}
+        data = {'label': str(date.date().day), 'value': amount}
         data_source['data'].append(data)
 
-    chart = FusionCharts("area2d", "cumsumChart", "85%", "400", "cumsumChart-container", "json", data_source)
+    chart = FusionCharts("area2d", "cumsumChart", "100%", "400", "cumsumChart-container", "json", data_source)
 
     return chart
 
