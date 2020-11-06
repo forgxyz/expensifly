@@ -43,7 +43,7 @@ def delete(request, tx_id=None):
 
 
 @login_required
-@permission_required('record.edit_expense', login_url='record:transactions')
+@permission_required('record.change_expense', login_url='record:transactions')
 def edit(request, tx_id=None):
     # if no tx_id, tx_id does not exist or user mismatch then do not process request
     try:
