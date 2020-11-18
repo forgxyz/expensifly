@@ -26,7 +26,7 @@ def category_chart(request):
         data = {'label': cat, 'value': int(amount)}
         data_source['data'].append(data)
 
-    chart = FusionCharts("doughnut2d", "categoryChart", "95%", "600", "categoryChart-container", "json", data_source)
+    chart = FusionCharts("doughnut2d", "categoryChart", "100%", "600", "categoryChart-container", "json", data_source)
     return chart
 
 
@@ -139,6 +139,6 @@ def weekly_expense(request, year, month=None):
         data = {'label': day, 'value': int(amount)}
         data_source['data'].append(data)
 
-    chart = FusionCharts("column2d", "weekdayBarChart", "85%", "400", "weekdayBarChart-container", "json", data_source)
+    chart = FusionCharts("column2d", "weekdayBarChart", "100%", "400", "weekdayBarChart-container", "json", data_source)
 
     return chart
