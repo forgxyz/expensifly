@@ -7,3 +7,4 @@ django-pandas
 gunicorn
 python-dotenv
 psycopg2-binary
+python-dotenv

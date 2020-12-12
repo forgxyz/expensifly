@@ -2,8 +2,17 @@
 {% load humanize %}
 {% block body %}
   <div class="container">
-    <h1>{{ request.session.selected_date|date:"F Y" }} transactions</h1>
-    <h2>{{ transactions.heading }} Total: ${{ transactions.expense_total_period|floatformat:2|intcomma }}</h2>
+    <h1>{{ request.session.selected_date|date:"F Y" }}
+
+    <div class="btn-group" role="group">
+      <a href="#expense" type="button" class="btn btn-outline-danger">Expenses</a>
+      <a href="#income" type="button" class="btn btn-outline-success">Incomes</a>
+    </div>
+    </h1>
+    <br>
+
+    <!-- expense table -->
+    <h2 id="expense">{{ transactions.heading }} Expense Total: <span class="expense">${{ transactions.expense_total_period|floatformat:2|intcomma }}</span></h2>
 
     <div class="table-responsive-sm">
       <table class="table table-hover table-striped">
@@ -22,10 +31,35 @@
             <td>{{ item.category }}</td>
             <td>{{ item.method }}</td>
             <td>{{ item.comment }}</td>
-            <td><a href="{% url 'record:edit' item.id %}" class="btn btn-outline-primary">edit</a></td>
+            <td><a href="{% url 'record:edit' 'expense' item.id %}" class="btn btn-outline-primary">edit</a></td>
           </tr>
         {% endfor %}
       </table>
     </div>
+
+    <!-- income table -->
+    <h2 id="income">{{ transactions.heading }} Income Total: <span class="income">${{ transactions.income_total_period|floatformat:2|intcomma }}</span></h2>
+
+    <div class="table-responsive-sm">
+      <table class="table table-hover table-striped">
+        <thead class="thead-dark">
+          <th scope="col">Date</th>
+          <th scope="col">Amount</th>
+          <th scope="col">Source</th>
+          <th scope="col"></th>
+        </thead>
+
+        {% for income in transactions.income_tx %}
+        <tr>
+          <td>{{ income.date }}</td>
+          <td>{{ income.amount }}</td>
+          <td>{{ income.source }}</td>
+          <td><a href="{% url 'record:edit' 'income' income.id %}" class="btn btn-outline-primary">edit</a></td>
+        </tr>
+        {% endfor %}
+
+      </table>
+    </div>
+
   </div>
 {% endblock %}

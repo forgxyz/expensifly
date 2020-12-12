@@ -21,69 +21,141 @@ def category(request, cat):
     return render(request, 'record/tx_list.html', context=context)
 
 
+# delete a transaction from the list
 @login_required
 @permission_required('record.delete_expense', login_url='record:transactions')
-def delete(request, tx_id=None):
-    # if no tx_id, tx_id does not exist or user mismatch then do not process request
-    try:
-        if tx_id is None or request.user != Expense.objects.get(pk=tx_id).user:
-            return HttpResponseRedirect(reverse('record:index'))
-    except:
-            return HttpResponseRedirect(reverse('record:index'))
-
-    if request.method == 'POST':
-        if request.user == Expense.objects.get(pk=tx_id).user:
-            Expense.objects.get(pk=tx_id).delete()
-            return HttpResponseRedirect(reverse('record:index'))
-
-        context = {'tx_id': tx_id, 'message': 'Error, user id mismatch.', 'message_type': 'danger'}
+def delete(request, tx_type=None, tx_id=None):
+    if tx_type == None:
+        context = {'message': 'Error, no transaction type provided', 'message_type': 'warning'}
         return render(request, 'record/index.html', context=context)
 
-    return HttpResponseRedirect(reverse('record:index'))
+    elif tx_type == 'expense':
+        # if no tx_id, tx_id does not exist or user mismatch then do not process request
+        try:
+            if tx_id is None or request.user != Expense.objects.get(pk=tx_id).user:
+                return HttpResponseRedirect(reverse('record:index'))
+        except:
+                return HttpResponseRedirect(reverse('record:index'))
+
+        if request.method == 'POST':
+            if request.user == Expense.objects.get(pk=tx_id).user:
+                Expense.objects.get(pk=tx_id).delete()
+                return HttpResponseRedirect(reverse('record:index'))
+
+            context = {'tx_id': tx_id, 'message': 'Error, user id mismatch.', 'message_type': 'danger'}
+            return render(request, 'record/index.html', context=context)
+
+        return HttpResponseRedirect(reverse('record:index'))
+
+    elif tx_type == 'income':
+        try:
+            if tx_id is None or request.user != Income.objects.get(pk=tx_id).user:
+                return HttpResponseRedirect(reverse('record:index'))
+        except:
+                return HttpResponseRedirect(reverse('record:index'))
+
+        if request.method == 'POST':
+            if request.user == Income.objects.get(pk=tx_id).user:
+                Income.objects.get(pk=tx_id).delete()
+                return HttpResponseRedirect(reverse('record:index'))
+
+            context = {'tx_id': tx_id, 'message': 'Error, user id mismatch.', 'message_type': 'danger'}
+            return render(request, 'record/index.html', context=context)
+
+        return HttpResponseRedirect(reverse('record:index'))
+    else:
+        context = {'message': 'Error, unsupported transaction type!', 'message_type': 'danger'}
+        return render(request, 'record/index.html', context=context)
 
 
+# edit selected transaction
 @login_required
 @permission_required('record.change_expense', login_url='record:transactions')
-def edit(request, tx_id=None):
-    # if no tx_id, tx_id does not exist or user mismatch then do not process request
-    try:
-        if tx_id is None or request.user != Expense.objects.get(pk=tx_id).user:
-            return HttpResponseRedirect(reverse('record:index'))
-    except:
-            return HttpResponseRedirect(reverse('record:index'))
+def edit(request, tx_type=None, tx_id=None):
+    if tx_type == None:
+        context = {'message': 'Error, no transaction type provided', 'message_type': 'warning'}
+        return render(request, 'record/index.html', context=context)
 
-    e = Expense.objects.get(pk=tx_id)
+    elif tx_type == 'expense':
+        # if no tx_id, tx_id does not exist or user mismatch then do not process request
+        try:
+            if tx_id is None or request.user != Expense.objects.get(pk=tx_id).user:
+                return HttpResponseRedirect(reverse('record:index'))
+        except:
+                return HttpResponseRedirect(reverse('record:index'))
 
-    if request.method == 'POST':
-        form = ExpenseForm(request.POST, instance=e)
-        if form.is_valid():
-            e.amount = form.cleaned_data['amount']
-            e.category = form.cleaned_data['category']
-            e.comment = form.cleaned_data['comment']
-            e.date = form.cleaned_data['date']
-            e.method = form.cleaned_data['method']
-            e.tag = form.cleaned_data['tag']
+        e = Expense.objects.get(pk=tx_id)
 
-            if form['amount'].value()[1] != 'USD':
-                e.amount = convert_money(form.cleaned_data['amount'], 'USD')
-                e.converted = True
-                e.fxamount = form.cleaned_data['amount']
-                e.comment = form.cleaned_data['comment'] + f' *EDITED [{e.fxamount}]*'
+        if request.method == 'POST':
+            form = ExpenseForm(request.POST, instance=e)
+            if form.is_valid():
+                e.amount = form.cleaned_data['amount']
+                e.category = form.cleaned_data['category']
+                e.comment = form.cleaned_data['comment']
+                e.date = form.cleaned_data['date']
+                e.method = form.cleaned_data['method']
+                e.tag = form.cleaned_data['tag']
 
-            e.save()
+                if form['amount'].value()[1] != 'USD':
+                    e.amount = convert_money(form.cleaned_data['amount'], 'USD')
+                    e.converted = True
+                    e.fxamount = form.cleaned_data['amount']
+                    e.comment = form.cleaned_data['comment'] + f' *EDITED [{e.fxamount}]*'
 
-            return HttpResponseRedirect(reverse('record:transactions'))
+                e.save()
 
-        context = {'form': form, 'tx_id': tx_id, 'message': 'Error, invalid input.', 'message_type': 'danger'}
+                return HttpResponseRedirect(reverse('record:transactions'))
 
-        return render(request, 'record/edit.html', context=context)
+            context = {'form': form, 'tx_id': tx_id, 'message': 'Error, invalid input.', 'message_type': 'danger'}
 
-    form = ExpenseForm(instance=e)
-    context = {'form': form, 'form_type': 'edit', 'tx_id': tx_id}
+            return render(request, 'record/edit.html', context=context)
 
-    return render(request, 'record/record.html', context=context)
+        form = ExpenseForm(instance=e)
+        context = {'form': form, 'form_type': 'edit', 'tx_id': tx_id, 'tx_type': tx_type}
+
+        return render(request, 'record/record.html', context=context)
+
+    elif tx_type == 'income':
+        # if no tx_id, tx_id does not exist or user mismatch then do not process request
+        try:
+            if tx_id is None or request.user != Income.objects.get(pk=tx_id).user:
+                return HttpResponseRedirect(reverse('record:index'))
+        except:
+                return HttpResponseRedirect(reverse('record:index'))
+
+        e = Income.objects.get(pk=tx_id)
+
+        if request.method == 'POST':
+            form = IncomeForm(request.POST, instance=e)
+            if form.is_valid():
+                e.amount = form.cleaned_data['amount']
+                e.date = form.cleaned_data['date']
+                e.source = form.cleaned_data['source']
+
+                if form['amount'].value()[1] != 'USD':
+                    e.amount = convert_money(form.cleaned_data['amount'], 'USD')
+                    e.converted = True
+                    e.fxamount = form.cleaned_data['amount']
+
+                e.save()
+
+                return HttpResponseRedirect(reverse('record:transactions'))
+
+            context = {'form': form, 'tx_id': tx_id, 'message': 'Error, invalid input.', 'message_type': 'danger'}
+
+            return render(request, 'record/edit.html', context=context)
+
+        form = IncomeForm(instance=e)
+        context = {'form': form, 'form_type': 'edit', 'tx_id': tx_id, 'tx_type': tx_type}
+
+        return render(request, 'record/record.html', context=context)
+
+    else:
+        context = {'message': 'Error, unsupported transaction type!', 'message_type': 'danger'}
+        return render(request, 'record/index.html', context=context)
 
 
+# handle submit button on expense form
 @login_required
 @permission_required('record.add_expense', login_url='record:transactions')
 def expense(request):
@@ -127,6 +199,7 @@ def expense(request):
     return render(request, 'record/record.html', context=context)
 
 
+# handle submit button on income form
 @login_required
 @permission_required('record.add_income', login_url='record:index')
 def income(request):
@@ -194,6 +267,7 @@ def index(request):
     return render(request, 'record/index.html', context=context)
 
 
+# now in the charts n stuff page
 @login_required
 def overview_portal(request):
 
@@ -225,7 +299,11 @@ def set_month(request, year, month):
 @login_required
 def transactions(request):
     tx = fetch_transactions(request, request.session['selected_date'].year, request.session['selected_date'].month)
+    income = fetch_income(request, request.session['selected_date'].year, request.session['selected_date'].month)
+
+    tx.update(income)
     context = {'transactions': tx}
+
     return render(request, 'record/tx_list.html', context=context)
 
 

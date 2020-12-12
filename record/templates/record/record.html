@@ -7,7 +7,7 @@
     <h1>{{ form_type }}</h1>
 
     {% if form_type == 'edit' %}
-      <form action="{% url 'record:edit' tx_id %}" method="post">
+      <form action="{% url 'record:edit' tx_type tx_id %}" method="post">
         {% csrf_token %}
         <div class="form-group">
           {{ form.as_p }}
@@ -15,10 +15,11 @@
         <button type="submit" class="btn btn-outline-success">Submit</button>
       </form>
         <hr>
-        <form action="{% url 'record:delete' tx_id %}" method="post">
+        <form action="{% url 'record:delete' tx_type tx_id %}" method="post">
           {% csrf_token %}
           <button type="submit" class="btn btn-outline-danger">Delete - THIS CANNOT BE UNDONE</button>
       </form>
+
     {% elif form_type == 'expense' %}
       <form action="{% url 'record:expense' %}" method="post">
         {% csrf_token %}
@@ -27,6 +28,7 @@
         </div>
         <button type="submit" class="btn btn-outline-success">Submit</button>
       </form>
+
     {% elif form_type == 'income' %}
       <form action="{% url 'record:income' %}" method="post">
         {% csrf_token %}
