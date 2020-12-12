@@ -1,3 +1,5 @@
+import pandas as pd
+
 from django.db.models import Sum
 from django_pandas.io import read_frame
 
@@ -31,13 +33,21 @@ def category_chart(request):
 
 
 def current_month_area(request):
-    tx = fetch_transactions(request, request.session['selected_date'].year, request.session['selected_date'].month)
+    expense = fetch_transactions(request, request.session['selected_date'].year, request.session['selected_date'].month)
+    income = fetch_income(request, request.session['selected_date'].year, request.session['selected_date'].month)
 
-    df = read_frame(tx['transactions'], fieldnames=['date', 'amount'])
+    expense_df = read_frame(expense['transactions'], fieldnames=['date', 'amount'])
+    income_df = read_frame(income['income_tx'], fieldnames=['date', 'amount'])
 
     # clean
-    df['date'] = df['date'].astype('datetime64')
-    df['amount'] = df['amount'].astype('float')
+    expense_df['date'] = expense_df['date'].astype('datetime64')
+    expense_df['amount'] = expense_df['amount'].astype('float')
+    expense_df['amount'] = expense_df['amount'] * -1
+
+    income_df['date'] = income_df['date'].astype('datetime64')
+    income_df['amount'] = income_df['amount'].astype('float')
+
+    df = pd.concat([expense_df, income_df])
 
     # flatten expenses down into day
     df = df.groupby('date').sum()
@@ -48,7 +58,8 @@ def current_month_area(request):
     "chart": {
         "theme": "fusion",
         "numberPrefix": "$",
-        "xaxisname": "Day of Month"
+        "xaxisname": "Day of Month",
+        "yaxisname": "Net $$$$"
             },
         "data": []
     }
@@ -71,7 +82,7 @@ def fetch_income(request, year, month=None):
 
     total = income.aggregate(Sum('amount'))['amount__sum']
 
-    context = {'income_year': total_year, 'income_total_period': total}
+    context = {'income_year': total_year, 'income_total_period': total, 'income_tx': income}
     return context
 
 
