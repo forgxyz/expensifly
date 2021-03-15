@@ -140,7 +140,7 @@ LOGIN_URL = '/login'
 
 # django-money settings
 AUTO_CONVERT_MONEY = True
-CURRENCIES = ('CAD', 'CHF', 'EUR', 'GBP', 'USD')
+CURRENCIES = ('CAD', 'CHF', 'EUR', 'ISK', 'GBP', 'USD')
 DEFAULT_CURRENCY = 'USD'
 EXCHANGE_BACKEND = 'djmoney.contrib.exchange.backends.FixerBackend'
 FIXER_ACCESS_KEY = os.getenv("FIXER_ACCESS_KEY")
