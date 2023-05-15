@@ -16,6 +16,10 @@
       <li><h5>out: <span class="expense">{{ expense_total_period|intcomma }}</span>{% if income_total_period > 0 %} | in: <span class="income">{{ income_total_period|intcomma }}</span></h5></li>
       <li><h5>net: {{ net_period|intcomma }}</h5></li>{% endif %}
     </ul>
+    <h3>Smart Spending</h3>
+    <ul style="list-style-type: none;">
+      Of the ${{ expense_total_period|intcomma }} spent so far this month, ${{ discretionary|floatformat:0|intcomma }} is discretionary while ${{ necessity|floatformat:0|intcomma }} was pre-budgeted.
+    </ul>
     <h3>where is it going</h3>
     <ol style="list-style-type: none;">
       {% for category, amount in expense_categories.amount.items %}

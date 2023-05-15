@@ -153,3 +153,20 @@ def weekly_expense(request, year, month=None):
     chart = FusionCharts("column2d", "weekdayBarChart", "100%", "400", "weekdayBarChart-container", "json", data_source)
 
     return chart
+
+def budget_adherence(request, year, month=None):
+    tx = fetch_transactions(request, year, month)
+
+    df = read_frame(tx['transactions'], fieldnames=['date', 'amount', 'budgeted'])
+
+    # clean
+    df['date'] = df['date'].astype('datetime64[s]')
+    df['amount'] = df['amount'].astype('float')
+    df['budgeted'] = df['budgeted'].astype('bool')
+
+    # sum expenses by category
+    df = df.groupby('budgeted')['amount'].sum()
+
+    context = df.to_dict()
+
+    return context

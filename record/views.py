@@ -95,6 +95,8 @@ def edit(request, tx_type=None, tx_id=None):
                 e.date = form.cleaned_data['date']
                 e.method = form.cleaned_data['method']
                 e.tag = form.cleaned_data['tag']
+                e.budgeted = form.cleaned_data['budgeted']
+                e.reimbursable = form.cleaned_data['reimbursable']
 
                 if form['amount'].value()[1] != 'USD':
                     e.amount = convert_money(form.cleaned_data['amount'], 'USD')
@@ -172,6 +174,8 @@ def expense(request):
             comment = form.cleaned_data['comment']
             tag = form.cleaned_data['tag']
             user = request.user
+            budgeted = form.cleaned_data['budgeted']
+            reimbursable = form.cleaned_data['reimbursable']
 
             # only save as USD, but note what the original amount was
             # also store original amount and flip converted to true
@@ -180,10 +184,10 @@ def expense(request):
                 converted = True
                 comment = comment + ' *ORIGINAL [' + str(amount) + ']*'
                 amount = convert_money(amount, 'USD')
-                Expense.objects.create(amount=amount, date=tx_date, category=cat, method=method, comment=comment, tag=tag, user=user, fxamount=fxamount, converted=converted)
+                Expense.objects.create(amount=amount, date=tx_date, category=cat, method=method, comment=comment, tag=tag, user=user, fxamount=fxamount, converted=converted, budgeted=budgeted, reimbursable=reimbursable)
             else:
                 # otherwise store as submitted
-                Expense.objects.create(amount=amount, date=tx_date, category=cat, method=method, comment=comment, tag=tag, user=user)
+                Expense.objects.create(amount=amount, date=tx_date, category=cat, method=method, comment=comment, tag=tag, user=user, budgeted=budgeted, reimbursable=reimbursable)
 
             # change to new month, if different from current. also adds new month to navbar
             set_month(request, tx_date.year, tx_date.month)
@@ -238,6 +242,8 @@ def index(request):
 
     incomes = fetch_income(request, request.session['selected_date'].year, request.session['selected_date'].month)
 
+    budgeted = budget_adherence(request, request.session['selected_date'].year, request.session['selected_date'].month)
+
     # set context variable
     context = tx
     context.update(incomes)
@@ -263,6 +269,8 @@ def index(request):
 
     context['net_year'] = context['income_year'] - context['expense_year']
 
+    context['discretionary'] = budgeted.get(False, 0)
+    context['necessity'] = budgeted.get(True, 0)
 
     return render(request, 'record/index.html', context=context)
 
