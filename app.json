@@ -1,0 +1,13 @@
+{
+    "name": "Expensifly",
+    "description": "Expensifly is a simple expense tracking app for personal use.",
+    "keywords": [
+        "expense",
+        "tracking",
+        "personal",
+        "finance"
+    ],
+    "website": "http://expensifly.herokuapp.com",
+    "repository": "https://github.com/forgxyz/expensifly",
+    "stack": "heroku-22"
+}
