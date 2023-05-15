@@ -38,13 +38,13 @@ else:
     ALLOWED_HOSTS = []
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# if not IS_HEROKU:
-DEBUG = True
-
+if not IS_HEROKU:
+    DEBUG = True
 
 # Application definition
 
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',
     'record.apps.RecordConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -154,11 +154,8 @@ STATIC_URL = '/static/'
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-
-
 # Set serializer
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
-
 
 # required for @login_required
 LOGIN_URL = '/login'
