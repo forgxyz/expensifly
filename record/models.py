@@ -44,6 +44,8 @@ class Expense(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     fxamount = MoneyField(max_digits=19, decimal_places=2, null=True, default=None)
     converted = models.BooleanField(default=False)
+    discretionary = models.BooleanField(default=False)
+    reimbursable = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['date']
