@@ -16,9 +16,9 @@ class Command(BaseCommand):
         User = get_user_model()
 
         if options['no_input']:
-            options['username'] = os.environ['DJANGO_ADMIN_USERNAME']
-            options['email'] = os.environ['DJANGO_ADMIN_EMAIL']
-            options['password'] = os.environ['DJANGO_ADMIN_PASSWORD']
+            options['username'] = os.environ['DJANGO_SUPERUSER_USERNAME']
+            options['email'] = os.environ['DJANGO_SUPERUSER_EMAIL']
+            options['password'] = os.environ['DJANGO_SUPERUSER_PASSWORD']
 
         if not User.objects.filter(username=options['username']).exists():
             User.objects.create_superuser(username=options['username'],
