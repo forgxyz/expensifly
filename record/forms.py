@@ -12,20 +12,18 @@ class ExpenseForm(forms.ModelForm):
         self.fields['method'].widget.attrs.update({'class': 'form-control'})
         self.fields['comment'].widget.attrs.update({'class': 'form-control'})
         self.fields['tag'].widget.attrs.update({'class': 'form-control'})
-        self.fields['discretionary'].widget.attrs.update({'class': 'form-control'})
-        self.fields['reimbursable'].widget.attrs.update({'class': 'form-control'})
+        self.fields['budgeted'].widget.attrs.update({'class': 'form-check'})
+        self.fields['reimbursable'].widget.attrs.update({'class': 'form-check form-check-inline'})
 
     class Meta:
         model = Expense
-        fields = ('amount', 'date', 'category', 'method', 'comment', 'tag', 'discretionary', 'reimbursable')
+        fields = ('amount', 'date', 'category', 'method', 'comment', 'tag', 'budgeted', 'reimbursable')
         help_texts = {
             'amount': 'amount will be converted to USD',
             'comment': '225 char max.',
             'tag': 'Separate tags by comma. 150 char max.',
-            'discretionary': 'Select True if the expense was a discretionary purchase, or leave false if a necessity / budgeted.',
-            'reimbursable': 'Select True if the expense is reimbursable, or leave false if not.'
+            'budgeted': 'Select if the expense was a budgeted purchase, leave unchecked if DISCRETIONARY.'
         }
-
 
 class IncomeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
