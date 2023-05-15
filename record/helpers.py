@@ -40,11 +40,11 @@ def current_month_area(request):
     income_df = read_frame(income['income_tx'], fieldnames=['date', 'amount'])
 
     # clean
-    expense_df['date'] = expense_df['date'].astype('datetime64')
+    expense_df['date'] = expense_df['date'].astype('datetime64[s]')
     expense_df['amount'] = expense_df['amount'].astype('float')
     expense_df['amount'] = expense_df['amount'] * -1
 
-    income_df['date'] = income_df['date'].astype('datetime64')
+    income_df['date'] = income_df['date'].astype('datetime64[s]')
     income_df['amount'] = income_df['amount'].astype('float')
 
     df = pd.concat([expense_df, income_df])
@@ -120,7 +120,7 @@ def weekly_expense(request, year, month=None):
     df = read_frame(tx['transactions'], fieldnames=['date', 'amount'])
 
     # clean
-    df['date'] = df['date'].astype('datetime64')
+    df['date'] = df['date'].astype('datetime64[s]')
     df['amount'] = df['amount'].astype('float')
 
     # flatten expenses down into day
