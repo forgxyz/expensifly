@@ -18,7 +18,7 @@
     </ul>
     <h3>Smart Spending</h3>
     <ul style="list-style-type: none;">
-      Of the ${{ expense_total_period|intcomma }} spent so far this month, ${{ discretionary }} is discretionary while ${{ necessity }} was pre-budgeted.
+      Of the ${{ expense_total_period|intcomma }} spent so far this month, ${{ discretionary|floatformat:0|intcomma }} is discretionary while ${{ necessity|floatformat:0|intcomma }} was pre-budgeted.
     </ul>
     <h3>where is it going</h3>
     <ol style="list-style-type: none;">
